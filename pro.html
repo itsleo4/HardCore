@@ -13,12 +13,15 @@
   <script src="pro.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>LuxFlix Pro 🔥</h1>
-    <div class="nav-buttons">
-      <a href="free.html">Free Videos</a>
-      <a href="auth.html" id="logoutBtn">Logout</a>
+  <!-- 🔥 Premium Header -->
+  <header style="position: sticky; top: 0; background-color: #111; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 999; box-shadow: 0 4px 10px rgba(255,0,100,0.3); border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <div style="font-size: 1.6rem; font-weight: bold; color: #ff4f9f; text-shadow: 1px 1px 5px #ff4f9f;">
+      🔥 LuxFlix Pro
     </div>
+    <nav style="display: flex; gap: 20px;">
+      <a href="free.html" style="color: #fff; text-decoration: none; font-size: 1rem; font-weight: 600; transition: 0.3s; border-bottom: 2px solid transparent;" onmouseover="this.style.borderBottomColor='#ff4f9f'" onmouseout="this.style.borderBottomColor='transparent'">Free Videos</a>
+      <a href="auth.html" onclick="logout()" style="color: #ff4f9f; text-decoration: none; font-size: 1rem; font-weight: 600; border: 1px solid #ff4f9f; padding: 6px 14px; border-radius: 30px; transition: 0.3s; background-color: transparent;" onmouseover="this.style.backgroundColor='#ff4f9f'; this.style.color='#000'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#ff4f9f'">Logout</a>
+    </nav>
   </header>
 
   <main>
@@ -29,5 +32,13 @@
   <footer>
     <p>© 2025 LuxFlix. Enter the Premium Realm.</p>
   </footer>
+
+  <script>
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      // Optionally, redirect to auth.html or home page after logout
+      window.location.href = "auth.html"; 
+    }
+  </script>
 </body>
 </html>
