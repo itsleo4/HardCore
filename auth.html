@@ -3,23 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login | LuxFlix</title>
-  <link rel="stylesheet" href="auth.css" />
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="firebase-config.js" defer></script>
-  <script src="auth.js" defer></script>
+  <title>LuxFlix | Login / Register</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      max-width: 300px;
+      background: #222;
+      border: 1px solid #555;
+      color: #fff;
+      border-radius: 8px;
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      width: 150px;
+      background: #e60073;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ff007f;
+    }
+    #messageBox {
+      margin-top: 15px;
+      color: red;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-  <div class="auth-container">
-    <h1>🔐 LuxFlix Access</h1>
-    <div id="auth-box">
-      <input type="email" id="email" placeholder="Email" />
-      <input type="password" id="password" placeholder="Password" />
-      <button id="authBtn">Login</button>
-      <p id="toggleMode">Don't have an account? <span id="switchLink">Register</span></p>
-      <p id="statusMessage"></p>
-    </div>
+
+  <h1>🔐 LuxFlix Access</h1>
+
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Password" />
+
+  <div>
+    <button id="loginBtn">Login</button>
+    <button id="registerBtn">Register</button>
   </div>
+
+  <div id="messageBox"></div>
+
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
