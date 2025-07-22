@@ -1,52 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LuxFlix - Premium Hentai</title>
+  <meta charset="UTF-8">
+  <title>LuxFlix Pro Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
-      color: white;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0e0e0e;
+      color: #fff;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       height: 100vh;
+    }
+
+    .auth-container {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 15px rgba(255, 0, 128, 0.3);
+    }
+
+    h2 {
       text-align: center;
-    }
-
-    .container {
-      max-width: 90%;
-    }
-
-    h1 {
-      font-size: 2.5rem;
+      color: hotpink;
       margin-bottom: 20px;
     }
 
-    .button {
-      padding: 20px 40px;
-      font-size: 1.2rem;
-      background-color: #ff0055;
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: #222;
       color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.3s;
+      border: 1px solid #555;
+      border-radius: 8px;
     }
 
-    .button:hover {
-      background-color: #ff3366;
+    button {
+      width: 100%;
+      padding: 12px;
+      background: hotpink;
+      border: none;
+      border-radius: 8px;
+      color: black;
+      font-weight: bold;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ff69b4;
+    }
+
+    .toggle {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .toggle:hover {
+      color: hotpink;
+    }
+
+    #user-info {
+      margin-top: 20px;
+      text-align: center;
+      color: lightgreen;
+    }
+
+    #logout-btn {
+      background: crimson;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Unlock Full Access to LuxFlix 🔞</h1>
-    <button class="button" onclick="window.location.href='membership.html'">Become a Member</button>
+
+  <div class="auth-container">
+    <h2 id="form-title">Login to LuxFlix</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button id="auth-btn">Login</button>
+    <div class="toggle" id="toggle-form">Don't have an account? Sign up</div>
+
+    <div id="user-info" style="display:none;">
+      <p>Welcome, <span id="user-email"></span></p>
+      <button id="logout-btn">Logout</button>
+    </div>
   </div>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
+      authDomain: "hardcoreuser-45287.firebaseapp.com",
+      projectId: "hardcoreuser-45287",
+      storageBucket: "hardcoreuser-45287.appspot.com",
+      messagingSenderId: "1080064455870",
+      appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
+      measurementId: "G-KLSC9Q7KBR"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const authBtn = document.getElementById("auth-btn");
+    const toggleForm = document.getElementById("toggle-form");
+    const formTitle = document.getElementById("form-title");
+    const userInfo = document.getElementById("user-info");
+    const userEmail = document.getElementById("user-email");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    let isLogin = true;
+
+    toggleForm.addEventListener("click", () => {
+      isLogin = !isLogin;
+      formTitle.textContent = isLogin ? "Login to LuxFlix" : "Sign up for LuxFlix";
+      authBtn.textContent = isLogin ? "Login" : "Sign Up";
+      toggleForm.textContent = isLogin ? "Don't have an account? Sign up" : "Already have an account? Login";
+    });
+
+    authBtn.addEventListener("click", () => {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      if (isLogin) {
+        auth.signInWithEmailAndPassword(email, password)
+          .then(user => {
+            showUser(user.user);
+          })
+          .catch(err => alert(err.message));
+      } else {
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(user => {
+            showUser(user.user);
+          })
+          .catch(err => alert(err.message));
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      auth.signOut().then(() => {
+        userInfo.style.display = "none";
+        emailInput.style.display = "block";
+        passwordInput.style.display = "block";
+        authBtn.style.display = "block";
+        toggleForm.style.display = "block";
+        formTitle.textContent = "Login to LuxFlix";
+      });
+    });
+
+    function showUser(user) {
+      userEmail.textContent = user.email;
+      userInfo.style.display = "block";
+      emailInput.style.display = "none";
+      passwordInput.style.display = "none";
+      authBtn.style.display = "none";
+      toggleForm.style.display = "none";
+      formTitle.textContent = "Welcome to LuxFlix";
+    }
+
+    // Auto login if user already signed in
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        showUser(user);
+      }
+    });
+  </script>
 </body>
 </html>
