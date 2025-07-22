@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>LuxFlix Pro Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <style>
@@ -92,6 +91,7 @@
     <input type="email" id="email" placeholder="Email" required />
     <input type="password" id="password" placeholder="Password" required />
     <button id="auth-btn">Login</button>
+    <button id="guestBtn">Continue as Guest</button>
     <div class="toggle" id="toggle-form">Don't have an account? Sign up</div>
 
     <div id="user-info" style="display:none;">
@@ -118,6 +118,7 @@
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const authBtn = document.getElementById("auth-btn");
+    const guestBtn = document.getElementById("guestBtn");
     const toggleForm = document.getElementById("toggle-form");
     const formTitle = document.getElementById("form-title");
     const userInfo = document.getElementById("user-info");
@@ -152,12 +153,18 @@
       }
     });
 
+    // Redirect guest users to Free Videos
+    document.getElementById("guestBtn").addEventListener("click", () => {
+      window.location.href = "free.html";
+    });
+
     logoutBtn.addEventListener("click", () => {
       auth.signOut().then(() => {
         userInfo.style.display = "none";
         emailInput.style.display = "block";
         passwordInput.style.display = "block";
         authBtn.style.display = "block";
+        guestBtn.style.display = "block"; // Make sure guest button reappears on logout
         toggleForm.style.display = "block";
         formTitle.textContent = "Login to LuxFlix";
       });
@@ -169,6 +176,7 @@
       emailInput.style.display = "none";
       passwordInput.style.display = "none";
       authBtn.style.display = "none";
+      guestBtn.style.display = "none"; // Hide guest button when logged in
       toggleForm.style.display = "none";
       formTitle.textContent = "Welcome to LuxFlix";
     }
