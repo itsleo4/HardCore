@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Become a Pro Member - LuxFlix</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #1f1c2c, #928dab);
+      color: white;
+      text-align: center;
+    }
+
+    .preview {
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pay-btn {
+      padding: 15px 30px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: white;
+      background-color: #ff0066;
+      transition: 0.3s;
+    }
+
+    .pay-btn:hover {
+      background-color: #ff3385;
+    }
+
+    #qrContainer {
+      margin-top: 20px;
+    }
+
+    .qr-img {
+      width: 250px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    }
+
+    #switchBtn {
+      display: block;
+      margin-top: 10px;
+      text-decoration: underline;
+      color: #ddd;
+      cursor: pointer;
+    }
+
+    #submitBtn {
+      margin-top: 20px;
+      padding: 15px 25px;
+      font-size: 1rem;
+      background-color: #00c896;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: white;
+      transition: 0.3s;
+    }
+
+    #submitBtn:hover {
+      background-color: #00f5b8;
+    }
+
+    @media (max-width: 600px) {
+      .pay-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <audio autoplay loop>
+    <source src="bg-erotic.mp3" type="audio/mpeg" />
+  </audio>
+
+  <img src="preview.gif" alt="Preview" class="preview" />
+
+  <div class="btn-group" id="paymentButtons">
+    <button class="pay-btn" onclick="selectPayment('UPI')">Pay with UPI</button>
+    <button class="pay-btn" onclick="selectPayment('PayPal')">Pay with PayPal</button>
+  </div>
+
+  <div id="qrContainer" style="display: none;">
+    <img id="qrImage" class="qr-img" src="" alt="QR Code" />
+    <span id="switchBtn" onclick="switchMethod()">Switch Payment Method</span>
+    <br />
+    <button id="submitBtn" onclick="submitProof()">Submit Payment Proof</button>
+  </div>
+
+  <script>
+    let currentMethod = '';
+
+    function selectPayment(method) {
+      currentMethod = method;
+
+      document.getElementById('paymentButtons').style.display = 'none';
+      document.getElementById('qrContainer').style.display = 'block';
+
+      if (method === 'UPI') {
+        document.getElementById('qrImage').src = "https://files.catbox.moe/6x7qbj.jpg";
+      } else {
+        document.getElementById('qrImage').src = "https://files.catbox.moe/f2d9f1.png";
+      }
+    }
+
+    function switchMethod() {
+      document.getElementById('paymentButtons').style.display = 'flex';
+      document.getElementById('qrContainer').style.display = 'none';
+    }
+
+    function submitProof() {
+      alert("After payment, send screenshot to admin via Telegram.");
+    }
+  </script>
+</body>
+</html>

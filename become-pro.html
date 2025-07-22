@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Become a Pro Member - LuxFlix</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="form-container">
+    <h2>💎 Become a Pro Member</h2>
+    <p>Select a payment method and send the exact amount. After payment, submit proof using the form below.</p>
+
+    <div class="payment-section">
+      <div>
+        <h3>🇮🇳 Pay via UPI</h3>
+        <img src="assets/qr/upi.png" alt="UPI QR" class="qr-img">
+        <p><strong>UPI ID:</strong> yourupi@bank</p>
+      </div>
+
+      <div>
+        <h3>🌐 Pay via PayPal</h3>
+        <img src="assets/qr/paypal.png" alt="PayPal QR" class="qr-img">
+        <p><strong>PayPal Link:</strong> <a href="https://paypal.me/yourid" target="_blank">paypal.me/yourid</a></p>
+      </div>
+    </div>
+
+    <form id="paymentProofForm">
+      <h3>📤 Submit Payment Proof</h3>
+      <input type="text" id="proofUsername" placeholder="Your LuxFlix Username" required />
+      <input type="text" id="proofDetails" placeholder="Transaction ID or Note" required />
+      <button type="submit">Submit Proof</button>
+    </form>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
