@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LuxFlix - Pro</title>
+  <link rel="stylesheet" href="pro.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+</head>
+<body>
+  <audio autoplay loop style="display:none">
+    <source src="https://files.catbox.moe/aoacmv.mp3" type="audio/mpeg" />
+  </audio>
+
+  <div class="banner">
+    <h1>LuxFlix</h1>
+    <div class="user-action" id="userAction"></div>
+  </div>
+
+  <div id="guestMessage" class="guest-msg">
+    <h2>These elite videos are only for Pro Members 🕶️</h2>
+    <p>Become a member to unlock ultra-premium content.</p>
+    <a href="membership.html" class="cta-btn">Become a Member 🔥</a>
+  </div>
+
+  <div class="videos-container" id="videosContainer"></div>
+
+  <footer>
+    <p>© 2025 LuxFlix. Erotic World for the Elite.</p>
+  </footer>
+
+  <script src="pro.js"></script>
+</body>
+</html>
