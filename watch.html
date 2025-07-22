@@ -103,6 +103,7 @@
   <iframe id="videoFrame" allowfullscreen></iframe>
   <br>
   <button class="btn">❤️ Like</button>
+  <button class="btn">💾 Save (Login Required)</button>
   <button class="btn">💬 Comment (Login Required)</button>
 
   <div class="comments" id="commentsBox"></div>
@@ -117,15 +118,15 @@
 
   <script type="module">
     // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"; // Using latest version
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Using latest version
 
-    // Firebase configuration
+    // Firebase configuration (using the one from the new script with updated storageBucket)
     const firebaseConfig = {
       apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
       authDomain: "hardcoreuser-45287.firebaseapp.com",
       projectId: "hardcoreuser-45287",
-      storageBucket: "hardcoreuser-45287.appspot.com",
+      storageBucket: "hardcoreuser-45287.firebasestorage.app", // Updated storageBucket
       messagingSenderId: "1080064455870",
       appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
       measurementId: "G-KLSC9Q7KBR"
@@ -161,15 +162,54 @@
       };
     }
 
-    // Firebase Auth State Listener - Checks if user is logged in
+    // Firebase Auth State Listener - Protect this page
     onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        // Not logged in, show alert and redirect
+      if (user) {
+        console.log("✅ Logged in as", user.email);
+        // User is logged in, continue loading video content
+      } else {
+        console.log("⛔ Not logged in. Redirecting...");
+        // Not logged in, show alert and redirect to auth.html
         showAlertModal("You must be logged in to watch this video.", () => {
-          window.location.href = "login.html"; // redirect to login
+          window.location.href = "auth.html"; // Redirect to auth.html as per new script
         });
       }
     });
+
+    // Get references to the buttons
+    const likeButton = document.querySelector(".btn:nth-of-type(1)");
+    const saveButton = document.querySelector(".btn:nth-of-type(2)"); // New save button
+    const commentButton = document.querySelector(".btn:nth-of-type(3)");
+
+    // Add event listeners based on user login status
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        likeButton.addEventListener("click", () => {
+          showAlertModal("❤️ Thanks for liking!");
+        });
+
+        saveButton.addEventListener("click", () => {
+          showAlertModal("💾 Video saved to your list!");
+        });
+
+        commentButton.addEventListener("click", () => {
+          showAlertModal("💬 Comment feature coming soon!");
+        });
+      } else {
+        likeButton.addEventListener("click", () => {
+          showAlertModal("Login required to like videos.");
+        });
+
+        saveButton.addEventListener("click", () => {
+          showAlertModal("Login required to save videos.");
+        });
+
+        commentButton.addEventListener("click", () => {
+          showAlertModal("Login required to comment.");
+        });
+      }
+    });
+
 
     // Get DOM elements for the video page
     const params = new URLSearchParams(window.location.search);
@@ -200,8 +240,8 @@
 
     const comments = [
       "This is🔥🔥🔥!",
-      "Her moans were insane 👀",
-      "Came in seconds �",
+      "Her moans were insane �",
+      "Came in seconds 💦",
       "This website is better than PH fr!",
       "I’m addicted 😭",
       "Why is this better than Netflix?",
@@ -216,6 +256,10 @@
     const vidData = videos[vid - 1];
     if (vidData) {
       videoTitleElement.textContent = vidData.title;
+      // Add random views count
+      const views = Math.floor(Math.random() * 2000000) + 500000; // 500k to 2.5M
+      videoTitleElement.innerHTML += ` <span style="font-size: 14px; color: #aaa;">(${views.toLocaleString()} views)</span>`;
+
       videoFrameElement.src = vidData.embed;
     }
 
