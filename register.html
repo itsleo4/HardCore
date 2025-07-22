@@ -21,7 +21,7 @@
       border-radius: 10px;
       width: 300px;
       box-shadow: 0 0 15px rgba(255, 0, 123, 0.5);
-      text-align: center; /* Center content within the box */
+      text-align: center;
     }
     input {
       width: 100%;
@@ -29,7 +29,7 @@
       padding: 10px;
       border: none;
       border-radius: 6px;
-      background-color: #2a2a2a; /* Darker input background */
+      background-color: #2a2a2a;
       color: white;
     }
     button {
@@ -49,7 +49,7 @@
     h2 {
       text-align: center;
       margin-bottom: 20px;
-      color: hotpink; /* Added color for consistency */
+      color: hotpink;
     }
     .link {
       color: hotpink;
@@ -57,22 +57,21 @@
       text-align: center;
       margin-top: 10px;
       display: block;
-      text-decoration: underline; /* Make it look more like a link */
+      text-decoration: underline;
     }
     .link:hover {
       color: #ff69b4;
     }
-    /* Custom Alert Modal Styles (consistent with other pages) */
     #customAlertModal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1000; /* Sit on top */
+      display: none;
+      position: fixed;
+      z-index: 1000;
       left: 0;
       top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
       justify-content: center;
       align-items: center;
     }
@@ -114,7 +113,7 @@
     <span class="link" id="goToLogin">Already have an account? Login</span>
   </div>
 
-  <div id="customAlertModal" class="modal">
+  <div id="customAlertModal">
     <div class="modal-content">
       <p id="alertMessage"></p>
       <button id="alertCloseBtn">OK</button>
@@ -123,7 +122,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Removed sendEmailVerification
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
@@ -138,28 +137,21 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Get DOM elements for the custom alert modal
     const customAlertModal = document.getElementById("customAlertModal");
     const alertMessage = document.getElementById("alertMessage");
     const alertCloseBtn = document.getElementById("alertCloseBtn");
 
-    // Function to show custom alert modal (replaces alert())
     function showAlertModal(message, callback = null) {
       alertMessage.textContent = message;
-      customAlertModal.style.display = "flex"; // Use flex to center content
+      customAlertModal.style.display = "flex";
       alertCloseBtn.onclick = () => {
         customAlertModal.style.display = "none";
-        if (callback) {
-          callback();
-        }
+        if (callback) callback();
       };
-      // Close modal if user clicks outside of it
       window.onclick = (event) => {
-        if (event.target == customAlertModal) {
+        if (event.target === customAlertModal) {
           customAlertModal.style.display = "none";
-          if (callback) {
-            callback();
-          }
+          if (callback) callback();
         }
       };
     }
@@ -171,21 +163,17 @@
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        // The sendEmailVerification() block has been removed as requested.
-
-        // After successful user creation, show alert and redirect
-        showAlertModal("✅ Registration successful!", () => {
-          // Redirect to auth.html so the user can then log in
-          window.location.href = "auth.html";
+        // ✅ Immediately redirect to pro.html after success
+        showAlertModal("✅ Registration successful! Redirecting to LuxFlix Pro...", () => {
+          window.location.href = "pro.html";
         });
-
       } catch (error) {
-        showAlertModal("Registration failed: " + error.message); // Use custom modal for errors
+        showAlertModal("❌ Registration failed: " + error.message);
       }
     });
 
     document.getElementById("goToLogin").addEventListener("click", () => {
-      window.location.href = "auth.html"; // Redirect to auth.html (which handles login)
+      window.location.href = "login.html";
     });
   </script>
 
