@@ -1,27 +1,11 @@
 // auth.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { auth, onAuthStateChanged } from "./firebase-config.js";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-
-// ✅ Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
-  authDomain: "hardcoreuser-45287.firebaseapp.com",
-  projectId: "hardcoreuser-45287",
-  storageBucket: "hardcoreuser-45287.appspot.com",
-  messagingSenderId: "1080064455870",
-  appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
-  measurementId: "G-KLSC9Q7KBR"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // ✅ Register Logic
 document.getElementById("registerBtn")?.addEventListener("click", async () => {
@@ -49,14 +33,33 @@ document.getElementById("loginBtn")?.addEventListener("click", async () => {
       return;
     }
 
-    // ✅ Assume role manually for now: default = Free, admin manually upgrades in backend
+    // Remove localStorage role setting here; role will be managed real-time
     localStorage.setItem("userEmail", email);
-    localStorage.setItem("userRole", "Free"); // For real Pro check, use Firestore or manual
 
     alert("✅ Login successful!");
-    window.location.href = "pro.html";
+    // Redirect will be handled by onAuthStateChanged listener
   } catch (error) {
     alert("❌ Login Failed: " + error.message);
+  }
+});
+
+// Global onAuthStateChanged listener to manage auth state and redirect
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    if (!user.emailVerified) {
+      alert("❌ Please verify your email before logging in.");
+      signOut(auth);
+      return;
+    }
+    // Redirect logged-in users to pro.html
+    if (window.location.pathname.endsWith("login.html") || window.location.pathname.endsWith("register.html") || window.location.pathname.endsWith("index.html")) {
+      window.location.href = "pro.html";
+    }
+  } else {
+    // Redirect logged-out users to login.html if not already there
+    if (!window.location.pathname.endsWith("login.html") && !window.location.pathname.endsWith("register.html") && !window.location.pathname.endsWith("index.html")) {
+      window.location.href = "login.html";
+    }
   }
 });
 

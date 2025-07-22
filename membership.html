@@ -148,13 +148,15 @@
   <div id="upi" class="qr">
     <img src="https://files.catbox.moe/6x7qbj.jpg" alt="UPI QR" />
     <div class="switch" onclick="switchQR('paypal')">Switch to PayPal</div>
-    <button class="submit-btn">Submit Payment Proof</button>
+    <input type="file" id="proofFile" accept="image/*" style="margin-top: 10px; border-radius: 10px;"/>
+    <button class="submit-btn" id="submitProofBtn">Submit Payment Proof</button>
   </div>
 
   <div id="paypal" class="qr">
     <img src="https://files.catbox.moe/f2d9f1.png" alt="PayPal QR" />
     <div class="switch" onclick="switchQR('upi')">Switch to UPI</div>
-    <button class="submit-btn">Submit Payment Proof</button>
+    <input type="file" id="proofFile" accept="image/*" style="margin-top: 10px; border-radius: 10px;"/>
+    <button class="submit-btn" id="submitProofBtn">Submit Payment Proof</button>
   </div>
 
   <!-- Custom Alert Modal -->
@@ -166,22 +168,7 @@
   </div>
 
   <script type="module">
-    // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"; // Updated SDK version
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Updated SDK version
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
-      authDomain: "hardcoreuser-45287.firebaseapp.com",
-      projectId: "hardcoreuser-45287",
-      storageBucket: "hardcoreuser-45287.appspot.com",
-      messagingSenderId: "1080064455870",
-      appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
-      measurementId: "G-KLSC9Q7KBR"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    import { auth, onAuthStateChanged } from "./firebase-config.js";
 
     // Get DOM elements for the custom alert modal
     const customAlertModal = document.getElementById("customAlertModal");
@@ -230,13 +217,50 @@
     function switchQR(method) {
       showQR(method);
     }
-    function submitProof() {
-      showAlertModal("After payment, send screenshot to admin via Telegram."); // Using custom modal
+
+    // Payment proof submission logic
+    async function submitProof() {
+      const fileInput = document.getElementById("proofFile");
+      if (!fileInput.files.length) {
+        showAlertModal("❌ Please select a screenshot file before submitting.");
+        return;
+      }
+      const file = fileInput.files[0];
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Add user email if available
+      const userEmail = localStorage.getItem("userEmail") || "Unknown user";
+      formData.append("email", userEmail);
+
+      try {
+        // Replace with your Replit Telegram bot API endpoint URL
+        const response = await fetch("https://your-replit-telegram-bot-url/submit-proof", {
+          method: "POST",
+          body: formData
+        });
+
+        if (response.ok) {
+          showAlertModal("✅ Payment proof submitted successfully! Admin will review shortly.", () => {
+            fileInput.value = ""; // Clear file input
+          });
+        } else {
+          showAlertModal("❌ Failed to submit payment proof. Please try again later.");
+        }
+      } catch (error) {
+        showAlertModal("❌ Error submitting payment proof: " + error.message);
+      }
     }
+
     // Make functions globally accessible if they are called from inline HTML event handlers
     window.showQR = showQR;
     window.switchQR = switchQR;
     window.submitProof = submitProof;
+
+    // Attach event listener to submit button
+    document.getElementById("submitProofBtn").addEventListener("click", submitProof);
   </script>
 
 </body>
