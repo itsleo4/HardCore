@@ -98,8 +98,8 @@
 
   <!-- Buttons for Guest Users -->
   <div id="guestButtons">
-    <a href="auth.html">Login</a> <!-- Changed to auth.html -->
-    <a href="auth.html">Register</a> <!-- Changed to auth.html -->
+    <a href="login.html">Login</a>
+    <a href="register.html">Register</a>
   </div>
 
   <!-- Section for Logged-in Users -->
@@ -186,7 +186,7 @@
     document.getElementById("logoutBtn").addEventListener("click", () => {
       signOut(auth).then(() => {
         showAlertModal("✅ Logged out!", () => { /* Using custom modal */
-          window.location.href = "auth.html"; /* Redirect to auth.html */
+          window.location.href = "login.html"; /* Redirect to login.html */
         });
       }).catch((error) => {
         showAlertModal(`Logout failed: ${error.message}`); /* Show error in custom modal */
