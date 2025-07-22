@@ -1,132 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LuxFlix Register</title>
+  <meta charset="UTF-8">
+  <title>Register - LuxFlix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background-color: #0e0e0e;
-      color: white;
+      background: #000;
+      color: #fff;
       font-family: Arial, sans-serif;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       height: 100vh;
-      padding: 20px;
     }
-    .auth-box {
-      background-color: #1c1c1c;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
-      box-shadow: 0 0 15px rgba(255, 0, 123, 0.5);
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      margin-bottom: 10px;
+    input, button {
       padding: 10px;
-      border: none;
-      border-radius: 6px;
-      background-color: #2a2a2a;
-      color: white;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: hotpink;
-      border: none;
-      color: white;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #ff69b4;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: hotpink;
-    }
-    .link {
-      color: hotpink;
-      cursor: pointer;
-      text-align: center;
-      margin-top: 10px;
-      display: block;
-      text-decoration: underline;
-    }
-    .link:hover {
-      color: #ff69b4;
-    }
-    #customAlertModal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.7);
-      justify-content: center;
-      align-items: center;
-    }
-    #customAlertModal .modal-content {
-      background-color: #1a1a1a;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 400px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(255, 0, 123, 0.5);
-    }
-    #customAlertModal .modal-content button {
-      background-color: hotpink;
-      color: white;
-      padding: 10px 20px;
+      margin: 10px;
       border: none;
       border-radius: 5px;
-      cursor: pointer;
-      margin-top: 15px;
-      font-weight: bold;
     }
-    #customAlertModal .modal-content button:hover {
-      background-color: #ff69b4;
+    input {
+      width: 200px;
+    }
+    button {
+      background: #e60073;
+      color: #fff;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-
-  <div class="auth-box">
-    <h2>Register for LuxFlix</h2>
-    <form id="registerForm">
-      <input type="email" id="regEmail" placeholder="Email" required />
-      <input type="password" id="regPassword" placeholder="Password" required />
-      <button type="submit">Register</button>
-    </form>
-    <span class="link" id="goToLogin">Already have an account? Login</span>
-  </div>
-
-  <div id="customAlertModal">
-    <div class="modal-content">
-      <p id="alertMessage"></p>
-      <button id="alertCloseBtn">OK</button>
-    </div>
-  </div>
+  <h1>LuxFlix Register</h1>
+  <form id="registerForm">
+    <input type="email" id="email" placeholder="Email" required /><br>
+    <input type="password" id="password" placeholder="Password" required /><br>
+    <button type="submit">Register</button>
+  </form>
+  <p>Already have an account? <a href="login.html" style="color:#e60073;">Login here</a></p>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      sendEmailVerification,
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
@@ -141,47 +57,20 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const customAlertModal = document.getElementById("customAlertModal");
-    const alertMessage = document.getElementById("alertMessage");
-    const alertCloseBtn = document.getElementById("alertCloseBtn");
-
-    function showAlertModal(message, callback = null) {
-      alertMessage.textContent = message;
-      customAlertModal.style.display = "flex";
-      alertCloseBtn.onclick = () => {
-        customAlertModal.style.display = "none";
-        if (callback) callback();
-      };
-      window.onclick = (event) => {
-        if (event.target === customAlertModal) {
-          customAlertModal.style.display = "none";
-          if (callback) callback();
-        }
-      };
-    }
-
-    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    document.getElementById("registerForm").addEventListener("submit", (e) => {
       e.preventDefault();
-      const email = document.getElementById("regEmail").value.trim();
-      const password = document.getElementById("regPassword").value.trim();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await sendEmailVerification(userCredential.user);
-
-        showAlertModal(
-          "✅ Registration successful! A verification email has been sent. Please verify your email before logging in.",
-          () => window.location.href = "login.html"
-        );
-      } catch (error) {
-        showAlertModal("❌ Registration failed: " + error.message);
-      }
-    });
-
-    document.getElementById("goToLogin").addEventListener("click", () => {
-      window.location.href = "login.html";
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // ✅ No email verification needed
+          window.location.href = "pro.html"; // Redirect directly after register
+        })
+        .catch((error) => {
+          alert("Registration failed: " + error.message);
+        });
     });
   </script>
-
 </body>
 </html>
