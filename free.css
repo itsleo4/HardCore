@@ -1,99 +1,103 @@
+/* LuxFlix Premium Style for Free Section */
+
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #0f0f0f, #1c0b18);
   color: #fff;
 }
 
 header {
-  background: linear-gradient(to right, #ff416c, #ff4b2b);
-  padding: 16px;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
   text-align: center;
-  font-size: 24px;
+  color: white;
+  font-size: 2rem;
   font-weight: bold;
-  color: #fff;
+  letter-spacing: 2px;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 24px;
-  background: #111;
-}
-
-nav span {
-  font-size: 16px;
-}
-
-nav button, nav a {
-  background: #ff416c;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  text-decoration: none;
-}
-
-nav button:hover, nav a:hover {
-  background: #ff4b2b;
-}
-
-#guestBanner {
-  background: #1a1a1a;
+.login-status {
   text-align: center;
-  padding: 20px;
-  color: #ff4b2b;
-  font-size: 18px;
-  font-weight: bold;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  margin-bottom: 20px;
+  font-size: 1.1rem;
 }
 
-#videoGrid {
+.guest-banner {
+  text-align: center;
+  background: #230022;
+  color: #ff91e3;
+  padding: 15px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 0 20px 30px;
+  border: 2px dashed #ff4b2b;
+  border-radius: 10px;
+}
+
+.video-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
   padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .video-card {
-  background: #111;
-  border-radius: 12px;
+  background: #1b1b1b;
+  border-radius: 15px;
   overflow: hidden;
-  transition: transform 0.2s ease;
+  box-shadow: 0 0 10px #ff4b2b55;
+  transition: transform 0.3s ease;
+  position: relative;
 }
 
 .video-card:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 20px rgba(255, 75, 43, 0.4);
+  box-shadow: 0 0 15px #ff4b2b88;
 }
 
 .video-card img {
   width: 100%;
-  height: 180px;
+  display: block;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
 }
 
-.video-card h3 {
-  font-size: 16px;
+.video-info {
   padding: 10px;
-  margin: 0;
-  color: #fff;
   text-align: center;
 }
 
-.meta {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 12px 10px;
-  color: #ccc;
-  font-size: 14px;
+.video-info h3 {
+  margin: 10px 0 5px;
+  font-size: 1rem;
+  color: #ffccff;
+}
+
+.fake-metrics {
+  font-size: 0.9rem;
+  color: #bbbbbb;
 }
 
 footer {
-  background: #111;
   text-align: center;
-  padding: 20px;
-  font-size: 13px;
-  color: #666;
+  padding: 30px 10px;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+/* Make all links bright and visible */
+a {
+  color: #ff4b8b;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #ffccff;
+  text-shadow: 0 0 5px #ff4b8b;
 }
