@@ -48,6 +48,43 @@
       color: red;
       font-size: 14px;
     }
+    /* Custom Alert Modal Styles */
+    #customAlertModal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1000; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+      justify-content: center;
+      align-items: center;
+    }
+    #customAlertModal .modal-content {
+      background-color: #1a1a1a;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(230, 0, 115, 0.5); /* Matching button color */
+    }
+    #customAlertModal .modal-content button {
+      background-color: #e60073; /* Matching button color */
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    #customAlertModal .modal-content button:hover {
+      background-color: #ff007f; /* Matching button hover color */
+    }
   </style>
 </head>
 <body>
@@ -63,6 +100,14 @@
   </div>
 
   <div id="messageBox"></div>
+
+  <!-- Custom Alert Modal -->
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <p id="alertMessage"></p>
+      <button id="alertCloseBtn">OK</button>
+    </div>
+  </div>
 
   <script type="module" src="auth.js"></script>
 </body>
