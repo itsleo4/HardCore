@@ -2,133 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Become a Pro Member - LuxFlix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LuxFlix Membership</title>
   <style>
     body {
+      background-color: #0b0b0b;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 20px;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(to right, #1f1c2c, #928dab);
-      color: white;
       text-align: center;
     }
 
-    .preview {
-      width: 100%;
-      max-width: 320px;
-      margin: 0 auto 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    h1, h2 {
+      color: hotpink;
     }
 
-    .btn-group {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .pay-btn {
-      padding: 15px 30px;
-      font-size: 1rem;
+    .button {
+      display: inline-block;
+      margin: 10px;
+      padding: 14px 28px;
+      font-size: 18px;
       border: none;
-      border-radius: 10px;
-      cursor: pointer;
+      border-radius: 30px;
+      background-color: hotpink;
       color: white;
-      background-color: #ff0066;
-      transition: 0.3s;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
     }
 
-    .pay-btn:hover {
-      background-color: #ff3385;
+    .button:hover {
+      background-color: deeppink;
     }
 
-    #qrContainer {
-      margin-top: 20px;
+    .qr-box {
+      margin: 20px 0;
     }
 
-    .qr-img {
-      width: 250px;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    .qr-box img {
+      width: 240px;
+      border-radius: 14px;
+      box-shadow: 0 0 12px deeppink;
     }
 
-    #switchBtn {
-      display: block;
+    .switch-link {
       margin-top: 10px;
+      display: block;
+      color: #aaa;
       text-decoration: underline;
-      color: #ddd;
       cursor: pointer;
     }
 
-    #submitBtn {
-      margin-top: 20px;
-      padding: 15px 25px;
-      font-size: 1rem;
-      background-color: #00c896;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      color: white;
-      transition: 0.3s;
+    .teaser {
+      margin-top: 40px;
     }
 
-    #submitBtn:hover {
-      background-color: #00f5b8;
+    .teaser img {
+      max-width: 320px;
+      border-radius: 14px;
+      box-shadow: 0 0 15px deeppink;
     }
 
-    @media (max-width: 600px) {
-      .pay-btn {
-        width: 100%;
-      }
+    footer {
+      margin-top: 60px;
+      color: #aaa;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <audio autoplay loop>
-    <source src="bg-erotic.mp3" type="audio/mpeg" />
-  </audio>
 
-  <img src="preview.gif" alt="Preview" class="preview" />
+  <h1>LuxFlix 🔥 Pro Membership</h1>
+  <p>Select your preferred payment method</p>
 
-  <div class="btn-group" id="paymentButtons">
-    <button class="pay-btn" onclick="selectPayment('UPI')">Pay with UPI</button>
-    <button class="pay-btn" onclick="selectPayment('PayPal')">Pay with PayPal</button>
+  <div>
+    <button class="button" onclick="showPayment('upi')">Pay with UPI</button>
+    <button class="button" onclick="showPayment('paypal')">Pay with PayPal</button>
   </div>
 
-  <div id="qrContainer" style="display: none;">
-    <img id="qrImage" class="qr-img" src="" alt="QR Code" />
-    <span id="switchBtn" onclick="switchMethod()">Switch Payment Method</span>
-    <br />
-    <button id="submitBtn" onclick="submitProof()">Submit Payment Proof</button>
+  <div class="qr-box" id="upiBox" style="display: none;">
+    <h2>Scan UPI QR Code</h2>
+    <img src="https://files.catbox.moe/6x7qbj.jpg" alt="UPI QR">
+    <p>UPI ID: bholanitin308@oksbi</p>
   </div>
+
+  <div class="qr-box" id="paypalBox" style="display: none;">
+    <h2>Scan PayPal QR Code</h2>
+    <img src="https://files.catbox.moe/f2d9f1.png" alt="PayPal QR">
+    <p>PayPal: @bholanitin308</p>
+  </div>
+
+  <span class="switch-link" onclick="switchPayment()">🔁 Switch Payment Method</span>
+
+  <div class="teaser">
+    <h2>Feel the Heat Before You Even Join 🔥</h2>
+    <img src="https://itsleo4.github.io/HardCore/InShot_20250722_143124710.gif" alt="Teaser">
+  </div>
+
+  <br />
+  <a href="https://t.me/your_bot_or_username" class="button">Submit Payment Proof</a>
+
+  <footer>© 2025 LuxFlix. Your pleasure begins here.</footer>
 
   <script>
     let currentMethod = '';
 
-    function selectPayment(method) {
+    function showPayment(method) {
       currentMethod = method;
+      document.getElementById('upiBox').style.display = method === 'upi' ? 'block' : 'none';
+      document.getElementById('paypalBox').style.display = method === 'paypal' ? 'block' : 'none';
+    }
 
-      document.getElementById('paymentButtons').style.display = 'none';
-      document.getElementById('qrContainer').style.display = 'block';
-
-      if (method === 'UPI') {
-        document.getElementById('qrImage').src = "https://files.catbox.moe/6x7qbj.jpg";
+    function switchPayment() {
+      if (currentMethod === 'upi') {
+        showPayment('paypal');
       } else {
-        document.getElementById('qrImage').src = "https://files.catbox.moe/f2d9f1.png";
+        showPayment('upi');
       }
     }
-
-    function switchMethod() {
-      document.getElementById('paymentButtons').style.display = 'flex';
-      document.getElementById('qrContainer').style.display = 'none';
-    }
-
-    function submitProof() {
-      alert("After payment, send screenshot to admin via Telegram.");
-    }
   </script>
+
 </body>
 </html>

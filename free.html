@@ -3,30 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LuxFlix - Free Videos</title>
-  <link rel="stylesheet" href="free.css" />
+  <title>LuxFlix Free Videos</title>
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    a.button {
+      background: hotpink;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
+      display: inline-block;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+
+    a.button:hover {
+      background: deeppink;
+    }
+
+    .gif-box {
+      margin: 40px auto;
+    }
+
+    .gif-box img {
+      max-width: 300px;
+      border-radius: 14px;
+      box-shadow: 0 0 12px hotpink;
+    }
+
+    .video-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 30px;
+    }
+
+    iframe {
+      width: 320px;
+      height: 320px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+    }
+
+    footer {
+      margin: 60px 0 20px;
+      color: #aaa;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
 
-  <header>LuxFlix Free Collection</header>
-
-  <div class="login-status" id="userStatus">Checking login...</div>
-
-  <div id="guestBanner" class="guest-banner">
-    You're viewing as a guest. <a href="/login.html">Login</a> or <a href="/register.html">Register</a> for more features!
+  <!-- 🔥 Teaser GIF Top -->
+  <div class="gif-box">
+    <h2>🔥 Unlock More Pleasure — Become a LuxFlix Pro Member 🔐</h2>
+    <img src="https://itsleo4.github.io/HardCore/InShot_20250722_143037415.gif" alt="Teaser" />
+    <br />
+    <a href="membership.html" class="button">Become a Member</a>
   </div>
 
-  <div style="text-align:center; margin-bottom: 20px;">
-    <button id="loginBtn" style="display: none;">Login</button>
-    <button id="logoutBtn" style="display: none;">Logout</button>
+  <!-- 🆓 Free Video Grid -->
+  <div class="video-grid">
+    <iframe src="https://strtape.tech/e/xyz123/" frameborder="0" allowfullscreen></iframe>
+    <iframe src="https://strtape.tech/e/xyz456/" frameborder="0" allowfullscreen></iframe>
+    <!-- Add more iframe links here -->
   </div>
 
-  <section class="video-grid" id="videoGrid"></section>
+  <!-- 🔥 Teaser GIF Bottom -->
+  <div class="gif-box">
+    <h2>You're just a step away from unlocking everything 💦</h2>
+    <img src="https://itsleo4.github.io/HardCore/InShot_20250722_143037415.gif" alt="Teaser" />
+    <br />
+    <a href="membership.html" class="button">🔥 Become a Member</a>
+  </div>
 
-  <footer>
-    &copy; LuxFlix 2025 • Premium NSFW Content. All rights reserved.
-  </footer>
+  <footer>© 2025 LuxFlix. Enter the Premium Realm.</footer>
 
-  <script type="module" src="free.js"></script>
 </body>
 </html>
