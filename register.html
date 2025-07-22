@@ -122,7 +122,11 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      sendEmailVerification,
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
@@ -163,10 +167,12 @@
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        // ✅ Immediately redirect to pro.html after success
-        showAlertModal("✅ Registration successful! Redirecting to LuxFlix Pro...", () => {
-          window.location.href = "pro.html";
-        });
+        await sendEmailVerification(userCredential.user);
+
+        showAlertModal(
+          "✅ Registration successful! A verification email has been sent. Please verify your email before logging in.",
+          () => window.location.href = "login.html"
+        );
       } catch (error) {
         showAlertModal("❌ Registration failed: " + error.message);
       }
