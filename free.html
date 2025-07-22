@@ -2,195 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LuxFlix - Free Videos</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
   <style>
     body {
-      background-color: #0d0d0d;
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-      padding: 20px;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0a0a0a;
+      color: white;
+    }
+    header {
+      padding: 1rem;
+      background-color: #111;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
     }
     .video-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      padding: 1rem;
     }
     .video-card {
-      background: #1c1c1c;
+      background-color: #1b1b1b;
       border-radius: 12px;
       overflow: hidden;
-      transition: transform 0.3s ease;
+      box-shadow: 0 0 12px rgba(255, 0, 140, 0.3);
       position: relative;
     }
-    .video-card:hover {
-      transform: scale(1.02);
-    }
-    .video-thumb {
+    .video-card video,
+    .video-card img {
       width: 100%;
-      height: 220px;
+      aspect-ratio: 1 / 1;
       object-fit: cover;
+      display: block;
     }
     .video-info {
-      padding: 10px 15px;
+      padding: 0.5rem;
     }
-    .video-title {
-      font-size: 16px;
-      margin: 0 0 8px;
+    .meta {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-bottom: 0.25rem;
     }
-    .video-meta {
-      font-size: 14px;
-      color: #ccc;
-    }
-    .meta-icons {
-      margin-top: 8px;
+    .buttons {
       display: flex;
-      flex-wrap: wrap; /* Allow items to wrap */
-      gap: 10px;
-      font-size: 14px;
-      align-items: center; /* Vertically align items */
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
     }
-    .meta-icons button {
-      /* Ensure buttons in meta-icons are styled correctly */
-      padding: 8px 12px;
-      font-size: 0.9em;
-      margin: 0; /* Override global button margin */
+    .buttons span {
+      cursor: pointer;
     }
-
-    /* Styles for guest/logged-in UI elements */
-    .requires-auth {
-      display: none; /* Hidden by default, controlled by JS */
-    }
-    /* Main guest banner at the top of the body */
-    #main-guest-banner {
-      display: none; /* Hidden by default, controlled by JS */
-      background: #ff0033;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2em;
-      margin-bottom: 20px; /* Space below the banner */
-    }
-    #main-guest-banner a {
-      color: yellow;
-      text-decoration: underline;
-    }
-
-    /* Guest interaction banner within each video card */
-    .guest-interact-banner {
-      background-color: #333;
-      color: #ccc;
-      padding: 5px;
-      border-radius: 5px;
-      font-size: 0.9em;
-      text-align: center;
-      margin-top: 10px;
-      display: none; /* Hidden by default, controlled by JS */
-      flex-grow: 1; /* Allow it to take available space */
-    }
-
-    .comment-section {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      width: 100%; /* Take full width within meta-icons */
-    }
-    .comment-section textarea {
-      width: calc(100% - 10px); /* Adjust for padding */
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #444;
-      background-color: #222;
+    .guest-banner {
+      background: #ff0057;
       color: #fff;
-      resize: vertical;
-      min-height: 40px;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.1rem;
     }
-    .comment-section button {
-      align-self: flex-end; /* Align to the right */
-      padding: 8px 12px;
-      margin: 0; /* Override general button margin */
-      font-size: 0.9em;
+    .guest-banner a {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <!-- Guest Banner (Seductive Style) -->
-  <div id="main-guest-banner">
-    🔞 You're watching as a Guest. <a href="auth.html">Login or Become a Member</a> to unlock 🔥 comments, ❤️ likes, and 🔐 Pro content!
+  <header>LuxFlix - Free Videos</header>
+  <div id="guestBanner" class="guest-banner" style="display: none;">
+    You're watching as a guest. <a href="auth.html">Login or Register</a> to like, comment, and save videos, and unlock Pro content.
   </div>
 
-  <h1>🔥 Free Videos</h1>
   <div class="video-grid" id="videoGrid"></div>
 
   <script>
-    const fakeViews = () => (Math.floor(Math.random() * 3_000_000) + 1_000_000).toLocaleString();
-    const fakeLikes = () => (Math.floor(Math.random() * 500_000) + 100_000).toLocaleString();
-
-    const videos = [
-      {
-        id: 1,
-        title: "Giant dildo destroyed her pussy",
-        thumb: "https://i.imgur.com/4ZQZ4LF.jpeg",
-      },
-      {
-        id: 2,
-        title: "She didn't lose the chance",
-        thumb: "https://i.imgur.com/X9chW3N.jpeg",
-      },
-      {
-        id: 3,
-        title: "Shemale and two beauties",
-        thumb: "https://i.imgur.com/3UB1nVh.jpeg",
-      },
-      {
-        id: 4,
-        title: "Two elves and one milf",
-        thumb: "https://i.imgur.com/XDeOjHV.jpeg",
-      },
-      {
-        id: 5,
-        title: "Oiling the body then riding the dick",
-        thumb: "https://i.imgur.com/PqGaZ0MpkMF0qAG/",
-      },
-    ];
-
-    const grid = document.getElementById("videoGrid");
-    videos.forEach(video => {
-      grid.innerHTML += `
-        <div class="video-card">
-          <a href="watch.html?vid=${video.id}">
-            <img src="${video.thumb}" alt="${video.title}" class="video-thumb" />
-          </a>
-          <div class="video-info">
-            <h3 class="video-title">${video.title}</h3>
-            <div class="video-meta">${fakeViews()} views</div>
-            <div class="meta-icons">
-              <!-- Like button for logged-in users -->
-              <button class="requires-auth">❤️ ${fakeLikes()}</button>
-              <!-- Save button for logged-in users -->
-              <button class="requires-auth">💾 Save</button>
-              <!-- Comment section for logged-in users -->
-              <div class="requires-auth comment-section">
-                <textarea placeholder="Add a comment..."></textarea>
-                <button class="btn">💬 Comment</button>
-              </div>
-              <!-- Guest interaction banner within video card -->
-              <span class="guest-interact-banner">Login to Like/Save/Comment</span>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-  </script>
-
-  <!-- Firebase App & Auth -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
       authDomain: "hardcoreuser-45287.firebaseapp.com",
@@ -198,38 +90,87 @@
       storageBucket: "hardcoreuser-45287.appspot.com",
       messagingSenderId: "1080064455870",
       appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
+      measurementId: "G-KLSC9Q7KBR"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    window.addEventListener("DOMContentLoaded", () => {
-      onAuthStateChanged(auth, (user) => {
-        const mainGuestBanner = document.getElementById('main-guest-banner'); // Correct ID for the main banner
+    const fakeVideos = [
+      {
+        title: "Giant dildo destroyed her pussy",
+        thumb: "https://thumb.catbox.moe/hp49jz.jpg",
+        link: "watch.html?v=1",
+        views: randomViews(),
+        likes: randomLikes()
+      },
+      {
+        title: "She didn't lose the chance",
+        thumb: "https://thumb.catbox.moe/7odqex.jpg",
+        link: "watch.html?v=2",
+        views: randomViews(),
+        likes: randomLikes()
+      },
+      {
+        title: "Shemale and two beauties",
+        thumb: "https://thumb.catbox.moe/1f86o4.jpg",
+        link: "watch.html?v=3",
+        views: randomViews(),
+        likes: randomLikes()
+      },
+      {
+        title: "Two elves and one milf",
+        thumb: "https://thumb.catbox.moe/cy0i03.jpg",
+        link: "watch.html?v=4",
+        views: randomViews(),
+        likes: randomLikes()
+      },
+      {
+        title: "Oiling the body then riding the dick",
+        thumb: "https://thumb.catbox.moe/3phq3p.jpg",
+        link: "watch.html?v=5",
+        views: randomViews(),
+        likes: randomLikes()
+      }
+    ];
 
-        // Select all interactive elements that require authentication
-        const authRequiredElements = document.querySelectorAll('.requires-auth');
-        // Select all banners that appear for guests within video cards
-        const guestInteractBanners = document.querySelectorAll('.guest-interact-banner');
+    function randomViews() {
+      return (Math.floor(Math.random() * 9_000_000) + 1_000_000).toLocaleString() + " views";
+    }
 
-        if (user) {
-          // Logged-in user: show full features
-          authRequiredElements.forEach(el => {
-            if (el.classList.contains('comment-section')) {
-              el.style.display = 'flex'; // Use flex for the comment section
-            } else {
-              el.style.display = 'inline-block'; // Use inline-block for buttons
-            }
-          });
-          guestInteractBanners.forEach(el => el.style.display = 'none');
-          if (mainGuestBanner) mainGuestBanner.style.display = 'none';
-        } else {
-          // Guest user: hide like/comment/save
-          authRequiredElements.forEach(el => el.style.display = 'none');
-          guestInteractBanners.forEach(el => el.style.display = 'inline-block'); // Show guest interaction banner
-          if (mainGuestBanner) mainGuestBanner.style.display = 'block';
-        }
+    function randomLikes() {
+      return (Math.floor(Math.random() * 300_000) + 10_000).toLocaleString() + " likes";
+    }
+
+    function renderVideos() {
+      const grid = document.getElementById("videoGrid");
+      grid.innerHTML = "";
+
+      fakeVideos.forEach(video => {
+        const div = document.createElement("div");
+        div.className = "video-card";
+        div.innerHTML = `
+          <a href="${video.link}">
+            <img src="${video.thumb}" alt="${video.title}" />
+          </a>
+          <div class="video-info">
+            <div><strong>${video.title}</strong></div>
+            <div class="meta">${video.views} • ${video.likes}</div>
+            <div class="buttons">
+              <span>❤️ Save</span>
+              <span>⬇️ Download</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(div);
       });
+    }
+
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        document.getElementById("guestBanner").style.display = "block";
+      }
+      renderVideos();
     });
   </script>
 </body>
