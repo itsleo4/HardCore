@@ -4,29 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LuxFlix - Free Videos</title>
-  <link rel="stylesheet" href="style.css" />
-  <script type="module" src="free.js" defer></script>
-</head>
+  <link rel="stylesheet" href="style.css" /> <link rel="stylesheet" href="free.css" />  <script type="module" src="free.js" defer></script> </head>
 <body>
-  <header>
-    <h1>LuxFlix</h1>
-    <nav>
+  <div class="header-section">
+    <h1>🔥 Free Videos</h1> <div class="user-controls">
       <span id="userStatus"></span>
-      <button id="loginBtn" onclick="location.href='auth.html'">Login</button>
       <button id="logoutBtn" style="display:none;">Logout</button>
-    </nav>
-  </header>
+      <button id="loginBtn" onclick="window.location.href='auth.html'" style="display:none;">Login</button>
+    </div>
+  </div>
 
-  <section id="guestBanner" class="banner">
-    <p>Watch for Free. 🔥 Want More? <a href="membership.html">Become a Member</a> to unlock Pro Videos!</p>
-  </section>
+  <div id="main-guest-banner">
+    🔞 You're watching as a Guest. <a href="auth.html">Login or Become a Member</a> to unlock 🔥 comments, ❤️ likes, and 🔐 Pro content!
+  </div>
 
-  <main id="videoGrid" class="grid">
-    <!-- Videos will be inserted here by JS -->
-  </main>
+  <div class="video-grid" id="videoGrid">
+    </div>
 
   <footer>
     <p>&copy; 2025 LuxFlix. Erotic World for the Elite.</p>
   </footer>
+
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <p id="alertMessage"></p>
+      <button id="alertCloseBtn">OK</button>
+    </div>
+  </div>
 </body>
 </html>
