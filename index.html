@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>LuxFlix Pro Login</title>
+  <title>LuxFlix Pro Login</title> <!-- Title might need adjustment based on new page purpose -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <style>
     body {
       margin: 0;
@@ -17,175 +15,173 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      padding: 20px;
+      text-align: center; /* Center content for the new layout */
     }
 
-    .auth-container {
-      background: #1a1a1a;
-      padding: 30px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 0 15px rgba(255, 0, 128, 0.3);
-    }
-
-    h2 {
-      text-align: center;
+    h1 {
       color: hotpink;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      background: #222;
-      color: white;
-      border: 1px solid #555;
-      border-radius: 8px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: hotpink;
+    #guestButtons a, #userSection button {
+      display: inline-block;
+      padding: 12px 25px;
+      margin: 10px;
       border: none;
       border-radius: 8px;
+      font-size: 1rem;
+      background: hotpink;
       color: black;
       font-weight: bold;
-      margin-top: 10px;
       cursor: pointer;
+      text-decoration: none; /* For links */
+      transition: background 0.3s ease;
     }
 
-    button:hover {
+    #guestButtons a:hover, #userSection button:hover {
       background: #ff69b4;
     }
 
-    .toggle {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
-      cursor: pointer;
-      color: #ccc;
-    }
-
-    .toggle:hover {
-      color: hotpink;
-    }
-
-    #user-info {
+    #userSection {
       margin-top: 20px;
-      text-align: center;
       color: lightgreen;
     }
 
-    #logout-btn {
-      background: crimson;
-      margin-top: 10px;
+    #userEmail {
+      color: hotpink;
+    }
+
+    /* Custom Alert Modal Styles (copied from previous iterations for consistency) */
+    #customAlertModal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1000; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+      justify-content: center;
+      align-items: center;
+    }
+    #customAlertModal .modal-content {
+      background-color: #1a1a1a;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(255, 0, 128, 0.3);
+    }
+    #customAlertModal .modal-content button {
+      background-color: hotpink;
+      color: black; /* Changed to black for contrast */
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    #customAlertModal .modal-content button:hover {
+      background-color: #ff69b4;
     }
   </style>
 </head>
 <body>
 
-  <div class="auth-container">
-    <h2 id="form-title">Login to LuxFlix</h2>
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button id="auth-btn">Login</button>
-    <button id="guestBtn">Continue as Guest</button>
-    <div class="toggle" id="toggle-form">Don't have an account? Sign up</div>
+  <h1>Welcome to LuxFlix 🔥</h1>
 
-    <div id="user-info" style="display:none;">
-      <p>Welcome, <span id="user-email"></span></p>
-      <button id="logout-btn">Logout</button>
+  <!-- Buttons for Guest Users -->
+  <div id="guestButtons">
+    <a href="auth.html">Login</a> <!-- Changed to auth.html -->
+    <a href="auth.html">Register</a> <!-- Changed to auth.html -->
+  </div>
+
+  <!-- Section for Logged-in Users -->
+  <div id="userSection" style="display: none;">
+    <p>🔥 Logged in as <span id="userEmail"></span></p>
+    <button id="logoutBtn">Logout</button>
+  </div>
+
+  <!-- Custom Alert Modal -->
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <p id="alertMessage"></p>
+      <button id="alertCloseBtn">OK</button>
     </div>
   </div>
 
-  <script>
-    // Firebase config
+  <!-- Firebase Auth Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"; /* Updated SDK version */
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; /* Updated SDK version */
+
+    // ✅ Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
       authDomain: "hardcoreuser-45287.firebaseapp.com",
       projectId: "hardcoreuser-45287",
-      storageBucket: "hardcoreuser-45287.appspot.com",
+      storageBucket: "hardcoreuser-45287.firebasestorage.app",
       messagingSenderId: "1080064455870",
       appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
       measurementId: "G-KLSC9Q7KBR"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const authBtn = document.getElementById("auth-btn");
-    const guestBtn = document.getElementById("guestBtn");
-    const toggleForm = document.getElementById("toggle-form");
-    const formTitle = document.getElementById("form-title");
-    const userInfo = document.getElementById("user-info");
-    const userEmail = document.getElementById("user-email");
-    const logoutBtn = document.getElementById("logout-btn");
+    // Get DOM elements for the custom alert modal
+    const customAlertModal = document.getElementById("customAlertModal");
+    const alertMessage = document.getElementById("alertMessage");
+    const alertCloseBtn = document.getElementById("alertCloseBtn");
 
-    let isLogin = true;
-
-    toggleForm.addEventListener("click", () => {
-      isLogin = !isLogin;
-      formTitle.textContent = isLogin ? "Login to LuxFlix" : "Sign up for LuxFlix";
-      authBtn.textContent = isLogin ? "Login" : "Sign Up";
-      toggleForm.textContent = isLogin ? "Don't have an account? Sign up" : "Already have an account? Login";
-    });
-
-    authBtn.addEventListener("click", () => {
-      const email = emailInput.value;
-      const password = passwordInput.value;
-
-      if (isLogin) {
-        auth.signInWithEmailAndPassword(email, password)
-          .then(user => {
-            showUser(user.user);
-          })
-          .catch(err => alert(err.message));
-      } else {
-        auth.createUserWithEmailAndPassword(email, password)
-          .then(user => {
-            showUser(user.user);
-          })
-          .catch(err => alert(err.message));
-      }
-    });
-
-    // Redirect guest users to Free Videos
-    document.getElementById("guestBtn").addEventListener("click", () => {
-      window.location.href = "free.html";
-    });
-
-    logoutBtn.addEventListener("click", () => {
-      auth.signOut().then(() => {
-        userInfo.style.display = "none";
-        emailInput.style.display = "block";
-        passwordInput.style.display = "block";
-        authBtn.style.display = "block";
-        guestBtn.style.display = "block"; // Make sure guest button reappears on logout
-        toggleForm.style.display = "block";
-        formTitle.textContent = "Login to LuxFlix";
-      });
-    });
-
-    function showUser(user) {
-      userEmail.textContent = user.email;
-      userInfo.style.display = "block";
-      emailInput.style.display = "none";
-      passwordInput.style.display = "none";
-      authBtn.style.display = "none";
-      guestBtn.style.display = "none"; // Hide guest button when logged in
-      toggleForm.style.display = "none";
-      formTitle.textContent = "Welcome to LuxFlix";
+    // Function to show custom alert modal (replaces alert())
+    function showAlertModal(message, callback = null) {
+      alertMessage.textContent = message;
+      customAlertModal.style.display = "flex"; // Use flex to center content
+      alertCloseBtn.onclick = () => {
+        customAlertModal.style.display = "none";
+        if (callback) {
+          callback();
+        }
+      };
+      // Close modal if user clicks outside of it
+      window.onclick = (event) => {
+        if (event.target == customAlertModal) {
+          customAlertModal.style.display = "none";
+          if (callback) {
+            callback();
+          }
+        }
+      };
     }
 
-    // Auto login if user already signed in
-    auth.onAuthStateChanged(user => {
+    // ✅ Check Login Status
+    onAuthStateChanged(auth, (user) => {
       if (user) {
-        showUser(user);
+        document.getElementById("guestButtons").style.display = "none";
+        document.getElementById("userSection").style.display = "block";
+        document.getElementById("userEmail").textContent = user.email;
+      } else {
+        document.getElementById("guestButtons").style.display = "block";
+        document.getElementById("userSection").style.display = "none";
       }
+    });
+
+    // ✅ Logout Function
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        showAlertModal("✅ Logged out!", () => { /* Using custom modal */
+          window.location.href = "auth.html"; /* Redirect to auth.html */
+        });
+      }).catch((error) => {
+        showAlertModal(`Logout failed: ${error.message}`); /* Show error in custom modal */
+      });
     });
   </script>
 </body>

@@ -7,25 +7,29 @@
   <link rel="stylesheet" href="style.css"/>
   <style>
     body {
-      background: black;
+      margin: 0;
+      padding: 20px;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #1f1c2c, #928dab);
       color: white;
       text-align: center;
-      font-family: 'Segoe UI', sans-serif;
-      padding: 0;
-      margin: 0;
     }
+
     .gif-preview {
       width: 90%;
       max-width: 300px;
       margin: 20px auto;
       display: block;
       border-radius: 10px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
     }
+
     h1 {
       font-size: 1.8rem;
       margin: 10px 0;
       color: #ff3399;
     }
+
     .button-container {
       display: flex;
       justify-content: center;
@@ -33,32 +37,39 @@
       gap: 20px;
       margin: 20px;
     }
+
     .pay-btn {
       padding: 15px 30px;
-      background: #ff3399;
-      color: white;
+      font-size: 1rem;
       border: none;
       border-radius: 25px;
-      font-size: 1rem;
       cursor: pointer;
+      color: white;
+      background-color: #ff0066;
+      transition: 0.3s;
     }
+
     .pay-btn:hover {
-      background: #ff66cc;
+      background-color: #ff3385;
     }
+
     .qr {
       display: none;
       margin-top: 20px;
     }
+
     .qr img {
       width: 220px;
       border-radius: 10px;
     }
+
     .switch {
       color: #ccc;
       text-decoration: underline;
       margin-top: 10px;
       cursor: pointer;
     }
+
     .submit-btn {
       margin-top: 15px;
       background: #00cc66;
@@ -69,8 +80,51 @@
       color: white;
       cursor: pointer;
     }
+
+    .submit-btn:hover {
+      background: #00f5b8;
+    }
+
     audio {
       display: none;
+    }
+
+    /* Custom Alert Modal Styles */
+    #customAlertModal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1000; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+      justify-content: center;
+      align-items: center;
+    }
+    #customAlertModal .modal-content {
+      background-color: #1a1a1a;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(255, 51, 102, 0.5);
+    }
+    #customAlertModal .modal-content button {
+      background-color: #ff3366;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    #customAlertModal .modal-content button:hover {
+      background-color: #e6004c;
     }
   </style>
 </head>
@@ -103,7 +157,71 @@
     <button class="submit-btn">Submit Payment Proof</button>
   </div>
 
-  <script>
+  <!-- Custom Alert Modal -->
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <p id="alertMessage"></p>
+      <button id="alertCloseBtn">OK</button>
+    </div>
+  </div>
+
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"; // Updated SDK version
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Updated SDK version
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
+      authDomain: "hardcoreuser-45287.firebaseapp.com",
+      projectId: "hardcoreuser-45287",
+      storageBucket: "hardcoreuser-45287.appspot.com",
+      messagingSenderId: "1080064455870",
+      appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
+      measurementId: "G-KLSC9Q7KBR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Get DOM elements for the custom alert modal
+    const customAlertModal = document.getElementById("customAlertModal");
+    const alertMessage = document.getElementById("alertMessage");
+    const alertCloseBtn = document.getElementById("alertCloseBtn");
+
+    // Function to show custom alert modal (replaces alert())
+    function showAlertModal(message, callback = null) {
+      alertMessage.textContent = message;
+      customAlertModal.style.display = "flex"; // Use flex to center content
+      alertCloseBtn.onclick = () => {
+        customAlertModal.style.display = "none";
+        if (callback) {
+          callback();
+        }
+      };
+      // Close modal if user clicks outside of it
+      window.onclick = (event) => {
+        if (event.target == customAlertModal) {
+          customAlertModal.style.display = "none";
+          if (callback) {
+            callback();
+          }
+        }
+      };
+    }
+
+    // Firebase Auth State Listener for access control
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // Not logged in, show alert and redirect
+        showAlertModal("❌ Please login to access membership.", () => {
+          window.location.href = "auth.html"; // Redirect to auth.html for login
+        });
+      }
+    });
+
+    // Existing payment logic
+    let currentMethod = '';
+
     function showQR(method) {
       document.getElementById('upi').style.display = 'none';
       document.getElementById('paypal').style.display = 'none';
@@ -112,6 +230,13 @@
     function switchQR(method) {
       showQR(method);
     }
+    function submitProof() {
+      showAlertModal("After payment, send screenshot to admin via Telegram."); // Using custom modal
+    }
+    // Make functions globally accessible if they are called from inline HTML event handlers
+    window.showQR = showQR;
+    window.switchQR = switchQR;
+    window.submitProof = submitProof;
   </script>
 
 </body>
