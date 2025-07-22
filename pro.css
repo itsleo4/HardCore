@@ -1,0 +1,110 @@
+/*==================== LuxFlix PRO Style ====================*/
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0b0b0b;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+.banner {
+  background: linear-gradient(to right, #ff004f, #ff9900);
+  padding: 1.2rem;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  box-shadow: 0 0 20px #ff0066;
+  text-shadow: 0 0 10px #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.video-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 20px;
+  overflow: hidden;
+  width: 280px;
+  box-shadow: 0 0 12px rgba(255, 0, 80, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.video-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(255, 100, 200, 0.7);
+}
+
+.video-thumb {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 2px solid #ff0066;
+}
+
+.video-title {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffb3ec;
+  text-align: center;
+}
+
+.guest-warning {
+  background: #1f1f1f;
+  color: #ffb3b3;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  border-top: 2px dashed #ff004f;
+  border-bottom: 2px dashed #ff004f;
+  margin: 1rem auto 2rem auto;
+  max-width: 800px;
+  border-radius: 12px;
+}
+
+.guest-warning a {
+  color: #ff66ff;
+  font-weight: bold;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.guest-warning a:hover {
+  color: #ffffff;
+}
+
+.footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
+  padding: 1.5rem;
+  border-top: 1px solid #222;
+  margin-top: 2rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .video-card {
+    width: 90%;
+  }
+  .banner {
+    font-size: 2rem;
+  }
+}
