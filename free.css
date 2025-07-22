@@ -1,185 +1,99 @@
 body {
-  background-color: #0d0d0d;
+  margin: 0;
   font-family: 'Segoe UI', sans-serif;
+  background: #000;
   color: #fff;
-  padding: 20px;
 }
-.header-section {
+
+header {
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  padding: 16px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+}
+
+nav {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #333;
-  margin-bottom: 20px;
-}
-.user-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.user-controls button {
-  padding: 8px 15px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-#logoutBtn {
-  background-color: #ff3366;
-  color: white;
-}
-#logoutBtn:hover {
-  background-color: #e6004c;
-}
-#loginBtn {
-  background-color: #007bff;
-  color: white;
-}
-#loginBtn:hover {
-  background-color: #0056b3;
-}
-#userStatus {
-  font-size: 1em;
-  color: #ccc;
+  padding: 12px 24px;
+  background: #111;
 }
 
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+nav span {
+  font-size: 16px;
 }
+
+nav button, nav a {
+  background: #ff416c;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+nav button:hover, nav a:hover {
+  background: #ff4b2b;
+}
+
+#guestBanner {
+  background: #1a1a1a;
+  text-align: center;
+  padding: 20px;
+  color: #ff4b2b;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#videoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
 .video-card {
-  background: #1c1c1c;
+  background: #111;
   border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.3s ease;
-  position: relative;
+  transition: transform 0.2s ease;
 }
+
 .video-card:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(255, 75, 43, 0.4);
 }
-.video-thumb {
+
+.video-card img {
   width: 100%;
-  height: 220px;
+  height: 180px;
   object-fit: cover;
 }
-.video-info {
-  padding: 10px 15px;
-}
-.video-title {
+
+.video-card h3 {
   font-size: 16px;
-  margin: 0 0 8px;
-}
-.video-meta {
-  font-size: 14px;
-  color: #ccc;
-}
-.meta-icons {
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap; /* Allow items to wrap */
-  gap: 10px;
-  font-size: 14px;
-  align-items: center; /* Vertically align items */
-}
-.meta-icons button {
-  /* Ensure buttons in meta-icons are styled correctly */
-  padding: 8px 12px;
-  font-size: 0.9em;
-  margin: 0; /* Override global button margin */
-}
-
-/* Styles for guest/logged-in UI elements */
-.requires-auth {
-  display: none; /* Hidden by default, controlled by JS */
-}
-/* Main guest banner at the top of the body */
-#main-guest-banner {
-  display: none; /* Hidden by default, controlled by JS */
-  background: #ff0033;
-  color: white;
-  padding: 15px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.2em;
-  margin-bottom: 20px; /* Space below the banner */
-}
-#main-guest-banner a {
-  color: yellow;
-  text-decoration: underline;
-}
-
-/* Guest interaction banner within each video card */
-.guest-interact-banner {
-  background-color: #333;
-  color: #ccc;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 0.9em;
-  text-align: center;
-  margin-top: 10px;
-  display: none; /* Hidden by default, controlled by JS */
-  flex-grow: 1; /* Allow it to take available space */
-}
-
-.comment-section {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 100%; /* Take full width within meta-icons */
-}
-.comment-section textarea {
-  width: calc(100% - 10px); /* Adjust for padding */
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #444;
-  background-color: #222;
+  padding: 10px;
+  margin: 0;
   color: #fff;
-  resize: vertical;
-  min-height: 40px;
-}
-.comment-section button {
-  align-self: flex-end; /* Align to the right */
-  padding: 8px 12px;
-  margin: 0; /* Override general button margin */
-  font-size: 0.9em;
-}
-/* Custom Alert Modal Styles (Copied from watch.html for consistency) */
-#customAlertModal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1001; /* Sit on top, higher than other elements */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-  justify-content: center;
-  align-items: center;
-}
-#customAlertModal .modal-content {
-  background-color: #1a1a1a;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 400px;
-  border-radius: 10px;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(255, 51, 102, 0.5);
 }
-#customAlertModal .modal-content button {
-  background-color: #ff3366;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 15px;
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12px 10px;
+  color: #ccc;
+  font-size: 14px;
 }
-#customAlertModal .modal-content button:hover {
-  background-color: #e6004c;
+
+footer {
+  background: #111;
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  color: #666;
 }
