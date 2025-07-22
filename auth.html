@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login | HardCore</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0d0d0d;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 100px;
+    }
+    .form-box {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255,0,100,0.3);
+      width: 90%;
+      max-width: 400px;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      background: #ff0066;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ff3366;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>Login or Register</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <button onclick="register()">Register</button>
+    <p id="msg"></p>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module" src="./firebase.js"></script>
+  <script type="module">
+    import { auth } from './firebase.js';
+    import {
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    const emailEl = document.getElementById('email');
+    const passEl = document.getElementById('password');
+    const msgEl = document.getElementById('msg');
+
+    window.register = async function() {
+      try {
+        await createUserWithEmailAndPassword(auth, emailEl.value, passEl.value);
+        msgEl.innerText = "✅ Registered successfully!";
+      } catch (e) {
+        msgEl.innerText = "❌ " + e.message;
+      }
+    }
+
+    window.login = async function() {
+      try {
+        await signInWithEmailAndPassword(auth, emailEl.value, passEl.value);
+        msgEl.innerText = "✅ Login successful! Redirecting...";
+        setTimeout(() => {
+          window.location.href = "pro.html"; // After login, go to Pro section
+        }, 1000);
+      } catch (e) {
+        msgEl.innerText = "❌ " + e.message;
+      }
+    }
+
+    // Optional: Detect login state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Logged in:", user.email);
+      } else {
+        console.log("Not logged in");
+      }
+    });
+  </script>
+</body>
+</html>
