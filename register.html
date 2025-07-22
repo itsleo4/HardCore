@@ -13,6 +13,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      padding: 20px;
     }
     .auth-box {
       background-color: #1c1c1c;
@@ -20,6 +21,7 @@
       border-radius: 10px;
       width: 300px;
       box-shadow: 0 0 15px rgba(255, 0, 123, 0.5);
+      text-align: center; /* Center content within the box */
     }
     input {
       width: 100%;
@@ -27,6 +29,8 @@
       padding: 10px;
       border: none;
       border-radius: 6px;
+      background-color: #2a2a2a; /* Darker input background */
+      color: white;
     }
     button {
       width: 100%;
@@ -37,10 +41,15 @@
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #ff69b4;
     }
     h2 {
       text-align: center;
       margin-bottom: 20px;
+      color: hotpink; /* Added color for consistency */
     }
     .link {
       color: hotpink;
@@ -48,6 +57,48 @@
       text-align: center;
       margin-top: 10px;
       display: block;
+      text-decoration: underline; /* Make it look more like a link */
+    }
+    .link:hover {
+      color: #ff69b4;
+    }
+    /* Custom Alert Modal Styles (consistent with other pages) */
+    #customAlertModal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1000; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+      justify-content: center;
+      align-items: center;
+    }
+    #customAlertModal .modal-content {
+      background-color: #1a1a1a;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(255, 0, 123, 0.5);
+    }
+    #customAlertModal .modal-content button {
+      background-color: hotpink;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    #customAlertModal .modal-content button:hover {
+      background-color: #ff69b4;
     }
   </style>
 </head>
@@ -61,6 +112,14 @@
       <button type="submit">Register</button>
     </form>
     <span class="link" id="goToLogin">Already have an account? Login</span>
+  </div>
+
+  <!-- Custom Alert Modal -->
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <p id="alertMessage"></p>
+      <button id="alertCloseBtn">OK</button>
+    </div>
   </div>
 
   <script type="module">
@@ -80,6 +139,32 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // Get DOM elements for the custom alert modal
+    const customAlertModal = document.getElementById("customAlertModal");
+    const alertMessage = document.getElementById("alertMessage");
+    const alertCloseBtn = document.getElementById("alertCloseBtn");
+
+    // Function to show custom alert modal (replaces alert())
+    function showAlertModal(message, callback = null) {
+      alertMessage.textContent = message;
+      customAlertModal.style.display = "flex"; // Use flex to center content
+      alertCloseBtn.onclick = () => {
+        customAlertModal.style.display = "none";
+        if (callback) {
+          callback();
+        }
+      };
+      // Close modal if user clicks outside of it
+      window.onclick = (event) => {
+        if (event.target == customAlertModal) {
+          customAlertModal.style.display = "none";
+          if (callback) {
+            callback();
+          }
+        }
+      };
+    }
+
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("regEmail").value.trim();
@@ -88,15 +173,25 @@
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(userCredential.user);
-        alert("Registration successful! Please check your email to verify your account before logging in.");
-        window.location.href = "login.html";
+
+        // Replace the alert and redirection with the new HTML content
+        document.body.innerHTML = `
+          <div class="auth-box">
+            <h2>Verify Your Email</h2>
+            <p>We've sent a verification link to <strong>${email}</strong>. Please check your inbox.</p>
+            <p>After verifying, you can <a href="auth.html" style="color:hotpink;">Login here</a>.</p>
+          </div>
+        `;
+        // Note: After innerHTML replacement, previous event listeners on old elements are lost.
+        // For this specific case (redirecting to a new static message), it's acceptable.
+
       } catch (error) {
-        alert("Registration failed: " + error.message);
+        showAlertModal("Registration failed: " + error.message); // Use custom modal for errors
       }
     });
 
     document.getElementById("goToLogin").addEventListener("click", () => {
-      window.location.href = "login.html";
+      window.location.href = "auth.html"; // Redirect to auth.html (which handles login)
     });
   </script>
 
