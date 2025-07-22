@@ -163,11 +163,20 @@
 
     // ✅ Check Login Status
     onAuthStateChanged(auth, (user) => {
+      console.log("onAuthStateChanged triggered. User:", user);
       if (user) {
+        console.log("User is logged in:", user.email);
+        // Redirect logged-in users to pro.html
+        if (!window.location.pathname.endsWith("pro.html")) {
+          console.log("Redirecting to pro.html");
+          window.location.href = "pro.html";
+          return;
+        }
         document.getElementById("guestButtons").style.display = "none";
         document.getElementById("userSection").style.display = "block";
         document.getElementById("userEmail").textContent = user.email;
       } else {
+        console.log("No user logged in");
         document.getElementById("guestButtons").style.display = "block";
         document.getElementById("userSection").style.display = "none";
       }
