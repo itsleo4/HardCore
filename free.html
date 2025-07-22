@@ -2,176 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LuxFlix - Free Videos</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #0a0a0a;
-      color: white;
-    }
-    header {
-      padding: 1rem;
-      background-color: #111;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-      padding: 1rem;
-    }
-    .video-card {
-      background-color: #1b1b1b;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 12px rgba(255, 0, 140, 0.3);
-      position: relative;
-    }
-    .video-card video,
-    .video-card img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      display: block;
-    }
-    .video-info {
-      padding: 0.5rem;
-    }
-    .meta {
-      font-size: 0.85rem;
-      opacity: 0.8;
-      margin-bottom: 0.25rem;
-    }
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-    }
-    .buttons span {
-      cursor: pointer;
-    }
-    .guest-banner {
-      background: #ff0057;
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.1rem;
-    }
-    .guest-banner a {
-      color: #fff;
-      font-weight: bold;
-      text-decoration: underline;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="free.js" defer></script>
 </head>
 <body>
-  <header>LuxFlix - Free Videos</header>
-  <div id="guestBanner" class="guest-banner" style="display: none;">
-    You're watching as a guest. <a href="auth.html">Login or Register</a> to like, comment, and save videos, and unlock Pro content.
-  </div>
+  <header>
+    <h1>LuxFlix</h1>
+    <nav>
+      <span id="userStatus"></span>
+      <button id="loginBtn" onclick="location.href='auth.html'">Login</button>
+      <button id="logoutBtn" style="display:none;">Logout</button>
+    </nav>
+  </header>
 
-  <div class="video-grid" id="videoGrid"></div>
+  <section id="guestBanner" class="banner">
+    <p>Watch for Free. 🔥 Want More? <a href="membership.html">Become a Member</a> to unlock Pro Videos!</p>
+  </section>
 
-  <script>
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
-      authDomain: "hardcoreuser-45287.firebaseapp.com",
-      projectId: "hardcoreuser-45287",
-      storageBucket: "hardcoreuser-45287.appspot.com",
-      messagingSenderId: "1080064455870",
-      appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
-      measurementId: "G-KLSC9Q7KBR"
-    };
+  <main id="videoGrid" class="grid">
+    <!-- Videos will be inserted here by JS -->
+  </main>
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    const fakeVideos = [
-      {
-        title: "Giant dildo destroyed her pussy",
-        thumb: "https://thumb.catbox.moe/hp49jz.jpg",
-        link: "watch.html?v=1",
-        views: randomViews(),
-        likes: randomLikes()
-      },
-      {
-        title: "She didn't lose the chance",
-        thumb: "https://thumb.catbox.moe/7odqex.jpg",
-        link: "watch.html?v=2",
-        views: randomViews(),
-        likes: randomLikes()
-      },
-      {
-        title: "Shemale and two beauties",
-        thumb: "https://thumb.catbox.moe/1f86o4.jpg",
-        link: "watch.html?v=3",
-        views: randomViews(),
-        likes: randomLikes()
-      },
-      {
-        title: "Two elves and one milf",
-        thumb: "https://thumb.catbox.moe/cy0i03.jpg",
-        link: "watch.html?v=4",
-        views: randomViews(),
-        likes: randomLikes()
-      },
-      {
-        title: "Oiling the body then riding the dick",
-        thumb: "https://thumb.catbox.moe/3phq3p.jpg",
-        link: "watch.html?v=5",
-        views: randomViews(),
-        likes: randomLikes()
-      }
-    ];
-
-    function randomViews() {
-      return (Math.floor(Math.random() * 9_000_000) + 1_000_000).toLocaleString() + " views";
-    }
-
-    function randomLikes() {
-      return (Math.floor(Math.random() * 300_000) + 10_000).toLocaleString() + " likes";
-    }
-
-    function renderVideos() {
-      const grid = document.getElementById("videoGrid");
-      grid.innerHTML = "";
-
-      fakeVideos.forEach(video => {
-        const div = document.createElement("div");
-        div.className = "video-card";
-        div.innerHTML = `
-          <a href="${video.link}">
-            <img src="${video.thumb}" alt="${video.title}" />
-          </a>
-          <div class="video-info">
-            <div><strong>${video.title}</strong></div>
-            <div class="meta">${video.views} • ${video.likes}</div>
-            <div class="buttons">
-              <span>❤️ Save</span>
-              <span>⬇️ Download</span>
-            </div>
-          </div>
-        `;
-        grid.appendChild(div);
-      });
-    }
-
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        document.getElementById("guestBanner").style.display = "block";
-      }
-      renderVideos();
-    });
-  </script>
+  <footer>
+    <p>&copy; 2025 LuxFlix. Erotic World for the Elite.</p>
+  </footer>
 </body>
 </html>
