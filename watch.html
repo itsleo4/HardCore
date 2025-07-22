@@ -2,272 +2,229 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>LuxFlix - Watch Video</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body {
-      background: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      box-sizing: border-box;
-    }
-    iframe {
-      width: 100%;
-      max-width: 800px; /* Max width for video frame */
-      aspect-ratio: 16 / 9; /* Maintain 16:9 aspect ratio */
-      border: none;
-      margin-bottom: 15px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(255, 51, 102, 0.5); /* Pink shadow */
-    }
-    h1 {
-      color: #ff3366;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .btn {
-      padding: 10px 20px;
-      background: #ff3366;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      margin: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
-    .btn:hover {
-      background: #e6004c;
-      transform: translateY(-2px);
-    }
-    .comments {
-      margin-top: 30px;
-      width: 100%;
-      max-width: 800px;
-    }
-    .comment {
-      background: #1c1c1c;
-      padding: 10px 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    /* Custom Alert Modal Styles */
-    .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background-color: #1a1a1a;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 400px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(255, 51, 102, 0.5);
-    }
-    .modal-content button {
-      background-color: #ff3366;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    .modal-content button:hover {
-      background-color: #e6004c;
-    }
-  </style>
-</head>
-<body>
-  <h1 id="videoTitle"></h1>
-  <iframe id="videoFrame" allowfullscreen></iframe>
-  <br>
-  <button class="btn">❤️ Like</button>
-  <button class="btn">💾 Save (Login Required)</button>
-  <button class="btn">💬 Comment (Login Required)</button>
-
-  <div class="comments" id="commentsBox"></div>
-
-  <!-- Custom Alert Modal -->
-  <div id="customAlertModal" class="modal">
-    <div class="modal-content">
-      <p id="alertMessage"></p>
-      <button id="alertCloseBtn">OK</button>
-    </div>
-  </div>
-
+  <title>Watch Video - LuxFlix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module">
-    // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"; // Using latest version
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Using latest version
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Firebase configuration (using the one from the new script with updated storageBucket)
     const firebaseConfig = {
       apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
       authDomain: "hardcoreuser-45287.firebaseapp.com",
       projectId: "hardcoreuser-45287",
-      storageBucket: "hardcoreuser-45287.firebasestorage.app", // Updated storageBucket
+      storageBucket: "hardcoreuser-45287.appspot.com",
       messagingSenderId: "1080064455870",
       appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
       measurementId: "G-KLSC9Q7KBR"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Get DOM elements for the custom alert modal
-    const customAlertModal = document.getElementById("customAlertModal");
-    const alertMessage = document.getElementById("alertMessage");
-    const alertCloseBtn = document.getElementById("alertCloseBtn");
+    const videoData = [
+      {
+        title: "HD Exclusive Video 1",
+        embed: "https://strtape.tech/e/1pe3Yo0pMPseqWl/"
+      },
+      {
+        title: "HD Exclusive Video 2",
+        embed: "https://strtape.tech/e/WrlAXXvapBIbDkx/"
+      },
+      {
+        title: "HD Exclusive Video 3",
+        embed: "https://strtape.tech/e/owPJoQYvYbIJawz/"
+      },
+      {
+        title: "HD Exclusive Video 4",
+        embed: "https://strtape.tech/e/wDJrq9bxgxSoe1/"
+      },
+      {
+        title: "HD Exclusive Video 5",
+        embed: "https://strtape.tech/e/PqGaZ0MpkMF0qAG/"
+      }
+    ];
 
-    // Function to show custom alert modal
-    function showAlertModal(message, callback = null) {
-      alertMessage.textContent = message;
-      customAlertModal.style.display = "flex"; // Use flex to center content
-      alertCloseBtn.onclick = () => {
-        customAlertModal.style.display = "none";
-        if (callback) {
-          callback();
-        }
-      };
-      // Close modal if user clicks outside of it
-      window.onclick = (event) => {
-        if (event.target == customAlertModal) {
-          customAlertModal.style.display = "none";
-          if (callback) {
-            callback();
-          }
-        }
+    const urlParams = new URLSearchParams(window.location.search);
+    const vid = parseInt(urlParams.get("vid"));
+    const vidData = videoData[vid];
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        showAlertModal("You must login to view this video.", () => {
+          window.location.href = "auth.html";
+        });
+        return;
+      }
+
+      if (!vidData) {
+        showAlertModal("Invalid video ID.", () => {
+          window.location.href = "index.html";
+        });
+        return;
+      }
+
+      // Show video
+      const iframe = document.getElementById("videoIframe");
+      const title = document.getElementById("videoTitle");
+      const views = Math.floor(Math.random() * 1500000) + 300000;
+
+      iframe.src = vidData.embed;
+      title.innerHTML = `${vidData.title} <span style="font-size:14px; color:#aaa">(${views.toLocaleString()} views)</span>`;
+
+      const likeBtn = document.getElementById("likeBtn");
+      const commentBtn = document.getElementById("commentBtn");
+      const saveBtn = document.getElementById("saveBtn");
+
+      likeBtn.addEventListener("click", () => showAlertModal("❤️ Thanks for liking!"));
+      commentBtn.addEventListener("click", () => showAlertModal("💬 Comment feature coming soon."));
+      saveBtn.addEventListener("click", () => showAlertModal("💾 Video saved to your favorites!"));
+    });
+
+    function showAlertModal(message, callback) {
+      const modal = document.getElementById("alertModal");
+      const modalText = document.getElementById("alertMessage");
+      const modalClose = document.getElementById("closeModal");
+
+      modalText.textContent = message;
+      modal.style.display = "flex";
+
+      modalClose.onclick = () => {
+        modal.style.display = "none";
+        if (callback) callback();
       };
     }
 
-    // Firebase Auth State Listener - Protect this page
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("✅ Logged in as", user.email);
-        // User is logged in, continue loading video content
-      } else {
-        console.log("⛔ Not logged in. Redirecting...");
-        // Not logged in, show alert and redirect to auth.html
-        showAlertModal("You must be logged in to watch this video.", () => {
-          window.location.href = "auth.html"; // Redirect to auth.html as per new script
-        });
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      const shuffledComments = shuffle([
+        "That was hot 🔥🔥",
+        "She's amazing...",
+        "Loved the moves at 2:34",
+        "Can't stop watching this",
+        "More like this please!",
+        "Where can I find her?",
+        "Insanely good 😩"
+      ]);
+
+      const commentSection = document.getElementById("fakeComments");
+      shuffledComments.slice(0, 5).forEach(txt => {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.textContent = txt;
+        commentSection.appendChild(div);
+      });
     });
 
-    // Get references to the buttons
-    const likeButton = document.querySelector(".btn:nth-of-type(1)");
-    const saveButton = document.querySelector(".btn:nth-of-type(2)"); // New save button
-    const commentButton = document.querySelector(".btn:nth-of-type(3)");
-
-    // Add event listeners based on user login status
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        likeButton.addEventListener("click", () => {
-          showAlertModal("❤️ Thanks for liking!");
-        });
-
-        saveButton.addEventListener("click", () => {
-          showAlertModal("💾 Video saved to your list!");
-        });
-
-        commentButton.addEventListener("click", () => {
-          showAlertModal("💬 Comment feature coming soon!");
-        });
-      } else {
-        likeButton.addEventListener("click", () => {
-          showAlertModal("Login required to like videos.");
-        });
-
-        saveButton.addEventListener("click", () => {
-          showAlertModal("Login required to save videos.");
-        });
-
-        commentButton.addEventListener("click", () => {
-          showAlertModal("Login required to comment.");
-        });
-      }
-    });
-
-
-    // Get DOM elements for the video page
-    const params = new URLSearchParams(window.location.search);
-    const vid = parseInt(params.get("vid"));
-
-    const videos = [
-      {
-        title: "Giant dildo destroyed her pussy",
-        embed: "https://strtape.tech/e/1pe3Yo0pMPseqWl/",
-      },
-      {
-        title: "She didn't lose the chance",
-        embed: "https://strtape.tech/e/WrlAXXvapBIbDkx/",
-      },
-      {
-        title: "Shemale and two beauties",
-        embed: "https://strtape.tech/e/owPJoQYvYbIJawz/",
-      },
-      {
-        title: "Two elves and one milf",
-        embed: "https://strtape.tech/e/wDJrq9bxgxSoe1/",
-      },
-      {
-        title: "Oiling the body then riding the dick",
-        embed: "https://strtape.tech/e/PqGaZ0MpkMF0qAG/",
-      },
-    ];
-
-    const comments = [
-      "This is🔥🔥🔥!",
-      "Her moans were insane �",
-      "Came in seconds 💦",
-      "This website is better than PH fr!",
-      "I’m addicted 😭",
-      "Why is this better than Netflix?",
-      "Bro where’s part 2? 😫",
-      "I shouldn’t be watching this at work 🫣",
-    ];
-
-    const videoTitleElement = document.getElementById("videoTitle");
-    const videoFrameElement = document.getElementById("videoFrame");
-    const commentsBoxElement = document.getElementById("commentsBox");
-
-    const vidData = videos[vid - 1];
-    if (vidData) {
-      videoTitleElement.textContent = vidData.title;
-      // Add random views count
-      const views = Math.floor(Math.random() * 2000000) + 500000; // 500k to 2.5M
-      videoTitleElement.innerHTML += ` <span style="font-size: 14px; color: #aaa;">(${views.toLocaleString()} views)</span>`;
-
-      videoFrameElement.src = vidData.embed;
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
     }
-
-    const shuffled = comments.sort(() => 0.5 - Math.random()).slice(0, 5);
-    shuffled.forEach(text => {
-      commentsBoxElement.innerHTML += `<div class="comment">🧑‍💻 ${text}</div>`;
-    });
   </script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    iframe {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #f0f;
+    }
+
+    h2 {
+      margin-top: 15px;
+      font-size: 24px;
+    }
+
+    .btns {
+      margin: 15px 0;
+    }
+
+    .btn {
+      margin-right: 10px;
+      background: linear-gradient(to right, #f0c, #90f);
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      background: #f0f;
+    }
+
+    .comment {
+      background-color: #111;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 6px 0;
+      border-left: 4px solid #f0f;
+    }
+
+    #alertModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #222;
+      padding: 20px 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 20px #f0f;
+    }
+
+    .modal-content button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: #f0f;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .modal-content button:hover {
+      background: #c0c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <iframe id="videoIframe" allowfullscreen></iframe>
+    <h2 id="videoTitle">Loading...</h2>
+    <div class="btns">
+      <button class="btn" id="likeBtn">❤️ Like</button>
+      <button class="btn" id="commentBtn">💬 Comment</button>
+      <button class="btn" id="saveBtn">💾 Save</button>
+    </div>
+    <h3>Comments</h3>
+    <div id="fakeComments"></div>
+  </div>
+
+  <div id="alertModal">
+    <div class="modal-content">
+      <p id="alertMessage"></p>
+      <button id="closeModal">Close</button>
+    </div>
+  </div>
 </body>
 </html>
-�
