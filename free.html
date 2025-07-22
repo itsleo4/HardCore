@@ -46,19 +46,82 @@
     .meta-icons {
       margin-top: 8px;
       display: flex;
+      flex-wrap: wrap; /* Allow items to wrap */
       gap: 10px;
       font-size: 14px;
+      align-items: center; /* Vertically align items */
     }
-    .meta-icons span {
-      cursor: pointer;
-      transition: color 0.2s;
+    .meta-icons button {
+      /* Ensure buttons in meta-icons are styled correctly */
+      padding: 8px 12px;
+      font-size: 0.9em;
+      margin: 0; /* Override global button margin */
     }
-    .meta-icons span:hover {
-      color: #ff3366;
+
+    /* Styles for guest/logged-in UI elements */
+    .requires-auth {
+      display: none; /* Hidden by default, controlled by JS */
+    }
+    /* Main guest banner at the top of the body */
+    #main-guest-banner {
+      display: none; /* Hidden by default, controlled by JS */
+      background: #ff0033;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 20px; /* Space below the banner */
+    }
+    #main-guest-banner a {
+      color: yellow;
+      text-decoration: underline;
+    }
+
+    /* Guest interaction banner within each video card */
+    .guest-interact-banner {
+      background-color: #333;
+      color: #ccc;
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 0.9em;
+      text-align: center;
+      margin-top: 10px;
+      display: none; /* Hidden by default, controlled by JS */
+      flex-grow: 1; /* Allow it to take available space */
+    }
+
+    .comment-section {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%; /* Take full width within meta-icons */
+    }
+    .comment-section textarea {
+      width: calc(100% - 10px); /* Adjust for padding */
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background-color: #222;
+      color: #fff;
+      resize: vertical;
+      min-height: 40px;
+    }
+    .comment-section button {
+      align-self: flex-end; /* Align to the right */
+      padding: 8px 12px;
+      margin: 0; /* Override general button margin */
+      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
+  <!-- Guest Banner (Seductive Style) -->
+  <div id="main-guest-banner">
+    🔞 You're watching as a Guest. <a href="auth.html">Login or Become a Member</a> to unlock 🔥 comments, ❤️ likes, and 🔐 Pro content!
+  </div>
+
   <h1>🔥 Free Videos</h1>
   <div class="video-grid" id="videoGrid"></div>
 
@@ -90,7 +153,7 @@
       {
         id: 5,
         title: "Oiling the body then riding the dick",
-        thumb: "https://i.imgur.com/UMcl0ST.jpeg",
+        thumb: "https://i.imgur.com/PqGaZ0MpkMF0qAG/",
       },
     ];
 
@@ -105,12 +168,68 @@
             <h3 class="video-title">${video.title}</h3>
             <div class="video-meta">${fakeViews()} views</div>
             <div class="meta-icons">
-              <span>❤️ ${fakeLikes()}</span>
-              <span>💾 Save</span>
+              <!-- Like button for logged-in users -->
+              <button class="requires-auth">❤️ ${fakeLikes()}</button>
+              <!-- Save button for logged-in users -->
+              <button class="requires-auth">💾 Save</button>
+              <!-- Comment section for logged-in users -->
+              <div class="requires-auth comment-section">
+                <textarea placeholder="Add a comment..."></textarea>
+                <button class="btn">💬 Comment</button>
+              </div>
+              <!-- Guest interaction banner within video card -->
+              <span class="guest-interact-banner">Login to Like/Save/Comment</span>
             </div>
           </div>
         </div>
       `;
+    });
+  </script>
+
+  <!-- Firebase App & Auth -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
+      authDomain: "hardcoreuser-45287.firebaseapp.com",
+      projectId: "hardcoreuser-45287",
+      storageBucket: "hardcoreuser-45287.appspot.com",
+      messagingSenderId: "1080064455870",
+      appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.addEventListener("DOMContentLoaded", () => {
+      onAuthStateChanged(auth, (user) => {
+        const mainGuestBanner = document.getElementById('main-guest-banner'); // Correct ID for the main banner
+
+        // Select all interactive elements that require authentication
+        const authRequiredElements = document.querySelectorAll('.requires-auth');
+        // Select all banners that appear for guests within video cards
+        const guestInteractBanners = document.querySelectorAll('.guest-interact-banner');
+
+        if (user) {
+          // Logged-in user: show full features
+          authRequiredElements.forEach(el => {
+            if (el.classList.contains('comment-section')) {
+              el.style.display = 'flex'; // Use flex for the comment section
+            } else {
+              el.style.display = 'inline-block'; // Use inline-block for buttons
+            }
+          });
+          guestInteractBanners.forEach(el => el.style.display = 'none');
+          if (mainGuestBanner) mainGuestBanner.style.display = 'none';
+        } else {
+          // Guest user: hide like/comment/save
+          authRequiredElements.forEach(el => el.style.display = 'none');
+          guestInteractBanners.forEach(el => el.style.display = 'inline-block'); // Show guest interaction banner
+          if (mainGuestBanner) mainGuestBanner.style.display = 'block';
+        }
+      });
     });
   </script>
 </body>

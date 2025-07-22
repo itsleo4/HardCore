@@ -1,3 +1,4 @@
+/* General Body and Font Styles */
 body {
   background-color: #0f0e17;
   color: #fff;
@@ -6,6 +7,7 @@ body {
   padding: 0;
 }
 
+/* Header Styles */
 header {
   text-align: center;
   padding: 30px 10px;
@@ -22,6 +24,7 @@ p {
   color: #f1f1f1;
 }
 
+/* Video Grid Layout */
 .video-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -29,6 +32,7 @@ p {
   padding: 30px;
 }
 
+/* Video Card Styles */
 .video-card {
   background: #1a1a1d;
   border-radius: 10px;
@@ -44,6 +48,7 @@ p {
   margin-bottom: 10px;
 }
 
+/* Become Pro Section */
 .become-pro {
   text-align: center;
   padding: 40px 20px;
@@ -64,6 +69,7 @@ p {
   animation: pulse 4s infinite ease-in-out;
 }
 
+/* Pulse Animation for Banner */
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
@@ -75,6 +81,7 @@ p {
   }
 }
 
+/* Input Field Styles */
 input[type="text"] {
   padding: 10px;
   width: 250px;
@@ -84,6 +91,7 @@ input[type="text"] {
   margin-bottom: 10px;
 }
 
+/* Button Styles */
 button {
   padding: 12px 25px;
   margin: 10px;
@@ -98,4 +106,36 @@ button {
 
 button:hover {
   background: linear-gradient(to right, #ff4b2b, #ff416c);
+}
+
+/* Guest/Logged-in UI Specific Styles */
+.guest-only {
+  display: none;
+}
+.logged-in-only {
+  display: none;
+}
+
+body.guest .guest-only {
+  display: block;
+}
+body.guest .logged-in-only {
+  display: none;
+}
+
+body.logged-in .guest-only {
+  display: none;
+}
+body.logged-in .logged-in-only {
+  display: block;
+}
+
+.warning-banner {
+  background: #ff2a2a;
+  color: white;
+  padding: 10px;
+  margin: 10px 0;
+  font-weight: bold;
+  border-radius: 8px;
+  text-align: center;
 }

@@ -4,120 +4,6 @@
   <meta charset="UTF-8">
   <title>Watch Video - LuxFlix</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
-      authDomain: "hardcoreuser-45287.firebaseapp.com",
-      projectId: "hardcoreuser-45287",
-      storageBucket: "hardcoreuser-45287.appspot.com",
-      messagingSenderId: "1080064455870",
-      appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
-      measurementId: "G-KLSC9Q7KBR"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    const videoData = [
-      {
-        title: "HD Exclusive Video 1",
-        embed: "https://strtape.tech/e/1pe3Yo0pMPseqWl/"
-      },
-      {
-        title: "HD Exclusive Video 2",
-        embed: "https://strtape.tech/e/WrlAXXvapBIbDkx/"
-      },
-      {
-        title: "HD Exclusive Video 3",
-        embed: "https://strtape.tech/e/owPJoQYvYbIJawz/"
-      },
-      {
-        title: "HD Exclusive Video 4",
-        embed: "https://strtape.tech/e/wDJrq9bxgxSoe1/"
-      },
-      {
-        title: "HD Exclusive Video 5",
-        embed: "https://strtape.tech/e/PqGaZ0MpkMF0qAG/"
-      }
-    ];
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const vid = parseInt(urlParams.get("vid"));
-    const vidData = videoData[vid];
-
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        showAlertModal("You must login to view this video.", () => {
-          window.location.href = "auth.html";
-        });
-        return;
-      }
-
-      if (!vidData) {
-        showAlertModal("Invalid video ID.", () => {
-          window.location.href = "index.html";
-        });
-        return;
-      }
-
-      // Show video
-      const iframe = document.getElementById("videoIframe");
-      const title = document.getElementById("videoTitle");
-      const views = Math.floor(Math.random() * 1500000) + 300000;
-
-      iframe.src = vidData.embed;
-      title.innerHTML = `${vidData.title} <span style="font-size:14px; color:#aaa">(${views.toLocaleString()} views)</span>`;
-
-      const likeBtn = document.getElementById("likeBtn");
-      const commentBtn = document.getElementById("commentBtn");
-      const saveBtn = document.getElementById("saveBtn");
-
-      likeBtn.addEventListener("click", () => showAlertModal("❤️ Thanks for liking!"));
-      commentBtn.addEventListener("click", () => showAlertModal("💬 Comment feature coming soon."));
-      saveBtn.addEventListener("click", () => showAlertModal("💾 Video saved to your favorites!"));
-    });
-
-    function showAlertModal(message, callback) {
-      const modal = document.getElementById("alertModal");
-      const modalText = document.getElementById("alertMessage");
-      const modalClose = document.getElementById("closeModal");
-
-      modalText.textContent = message;
-      modal.style.display = "flex";
-
-      modalClose.onclick = () => {
-        modal.style.display = "none";
-        if (callback) callback();
-      };
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const shuffledComments = shuffle([
-        "That was hot 🔥🔥",
-        "She's amazing...",
-        "Loved the moves at 2:34",
-        "Can't stop watching this",
-        "More like this please!",
-        "Where can I find her?",
-        "Insanely good 😩"
-      ]);
-
-      const commentSection = document.getElementById("fakeComments");
-      shuffledComments.slice(0, 5).forEach(txt => {
-        const div = document.createElement("div");
-        div.className = "comment";
-        div.textContent = txt;
-        commentSection.appendChild(div);
-      });
-    });
-
-    function shuffle(arr) {
-      return arr.sort(() => Math.random() - 0.5);
-    }
-  </script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -125,28 +11,34 @@
       color: #fff;
       margin: 0;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
 
     .container {
       max-width: 700px;
       margin: auto;
+      width: 100%; /* Ensure container takes full width up to max-width */
     }
 
     iframe {
       width: 100%;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 16 / 9; /* Maintain 16:9 aspect ratio for videos */
       border: none;
       border-radius: 12px;
       box-shadow: 0 0 10px #f0f;
+      margin-bottom: 15px; /* Added margin for spacing */
     }
 
     h2 {
       margin-top: 15px;
       font-size: 24px;
-    }
-
-    .btns {
-      margin: 15px 0;
+      color: #ff3366; /* Consistent with previous design */
+      text-align: center;
+      margin-bottom: 20px;
     }
 
     .btn {
@@ -158,6 +50,7 @@
       color: #fff;
       cursor: pointer;
       transition: 0.3s;
+      font-weight: bold; /* Added for consistency */
     }
 
     .btn:hover {
@@ -173,6 +66,7 @@
       border-left: 4px solid #f0f;
     }
 
+    /* Custom Alert Modal Styles */
     #alertModal {
       display: none;
       position: fixed;
@@ -205,18 +99,78 @@
     .modal-content button:hover {
       background: #c0c;
     }
+
+    /* New UI for Guest vs. Logged-in */
+    .guest-only, .logged-in-only {
+      display: none; /* Hidden by default */
+      width: 100%;
+      margin-bottom: 15px; /* Spacing for these sections */
+      text-align: center; /* Center content within these divs */
+    }
+
+    body.guest .guest-only {
+      display: block; /* Show guest-only elements when body has 'guest' class */
+    }
+
+    body.logged-in .logged-in-only {
+      display: block; /* Show logged-in-only elements when body has 'logged-in' class */
+    }
+
+    .warning-banner {
+      background-color: #333;
+      color: #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .comment-input-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .comment-input-section textarea {
+      width: calc(100% - 20px); /* Adjust for padding */
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background-color: #1a1a1a;
+      color: #fff;
+      resize: vertical; /* Allow vertical resizing */
+      min-height: 80px;
+    }
+
+    .comment-input-section button {
+      width: auto; /* Allow button to size naturally */
+      align-self: flex-end; /* Align to the right */
+      margin-right: 0; /* Remove extra margin */
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <iframe id="videoIframe" allowfullscreen></iframe>
     <h2 id="videoTitle">Loading...</h2>
-    <div class="btns">
-      <button class="btn" id="likeBtn">❤️ Like</button>
-      <button class="btn" id="commentBtn">💬 Comment</button>
-      <button class="btn" id="saveBtn">💾 Save</button>
-    </div>
+
+    <!-- Like Button -->
+    <div class="guest-only warning-banner">❤️ Login to Like</div>
+    <button class="logged-in-only btn" id="likeBtnLoggedIn">❤️ Like</button>
+
+    <!-- Save Button -->
+    <div class="guest-only warning-banner">💾 Login to Save</div>
+    <button class="logged-in-only btn" id="saveBtnLoggedIn">💾 Save</button>
+
     <h3>Comments</h3>
+    <!-- Comment Box -->
+    <div class="guest-only warning-banner">💬 Login to comment</div>
+    <div class="logged-in-only comment-input-section">
+      <textarea id="commentTextArea" placeholder="Write a comment..."></textarea>
+      <button id="postCommentBtn" class="btn">Post Comment</button>
+    </div>
     <div id="fakeComments"></div>
   </div>
 
@@ -226,5 +180,162 @@
       <button id="closeModal">Close</button>
     </div>
   </div>
+  
+  <script type="module">
+    // 🔌 Import Firebase from CDN (hosted version)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // 🔐 Your Firebase project config (copied from your Firebase dashboard)
+    const firebaseConfig = {
+      apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
+      authDomain: "hardcoreuser-45287.firebaseapp.com",
+      projectId: "hardcoreuser-45287",
+      storageBucket: "hardcoreuser-45287.firebasestorage.app", // Using the more specific storageBucket from the new script
+      messagingSenderId: "1080064455870",
+      appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
+      measurementId: "G-KLSC9Q7KBR"
+    };
+
+    // ✅ Initialize Firebase App
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Get DOM elements for the custom alert modal
+    const alertModal = document.getElementById("alertModal");
+    const alertMessage = document.getElementById("alertMessage");
+    const closeModalBtn = document.getElementById("closeModal");
+
+    // Function to show custom alert modal
+    function showAlertModal(message, callback = null) {
+      alertMessage.textContent = message;
+      alertModal.style.display = "flex";
+
+      closeModalBtn.onclick = () => {
+        alertModal.style.display = "none";
+        if (callback) callback();
+      };
+      // Close modal if user clicks outside of it
+      window.onclick = (event) => {
+        if (event.target == alertModal) {
+          alertModal.style.display = "none";
+          if (callback) callback();
+        }
+      };
+    }
+
+    const videoData = [
+      {
+        title: "HD Exclusive Video 1",
+        embed: "https://strtape.tech/e/1pe3Yo0pMPseqWl/"
+      },
+      {
+        title: "HD Exclusive Video 2",
+        embed: "https://strtape.tech/e/WrlAXXvapBIbDkx/"
+      },
+      {
+        title: "HD Exclusive Video 3",
+        embed: "https://strtape.tech/e/owPJoQYvYbIJawz/"
+      },
+      {
+        title: "HD Exclusive Video 4",
+        embed: "https://strtape.tech/e/wDJrq9bxgxSoe1/"
+      },
+      {
+        title: "HD Exclusive Video 5",
+        embed: "https://strtape.tech/e/PqGaZ0MpkMF0qAG/"
+      }
+    ];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const vid = parseInt(urlParams.get("vid"));
+    const vidData = videoData[vid];
+
+    // 👮 Protect this page and handle UI based on auth state
+    onAuthStateChanged(auth, (user) => {
+      // Add class to body for CSS-based UI toggling
+      if (user) {
+        document.body.classList.add("logged-in");
+        document.body.classList.remove("guest");
+        console.log("✅ Logged in as", user.email);
+      } else {
+        document.body.classList.add("guest");
+        document.body.classList.remove("logged-in");
+        console.log("⛔ Not logged in. Redirecting...");
+        showAlertModal("You must login to view this video.", () => {
+          window.location.href = "/auth.html"; // Use absolute path for redirection
+        });
+        return; // Stop execution if not logged in
+      }
+
+      // If user is logged in, proceed with video and button setup
+      if (user) {
+        if (!vidData) {
+          showAlertModal("Invalid video ID.", () => {
+            window.location.href = "/index.html"; // Use absolute path for redirection
+          });
+          return; // Stop execution if video data is invalid
+        }
+
+        // Show video
+        const iframe = document.getElementById("videoIframe");
+        const title = document.getElementById("videoTitle");
+        const views = Math.floor(Math.random() * 1500000) + 300000;
+
+        iframe.src = vidData.embed;
+        title.innerHTML = `${vidData.title} <span style="font-size:14px; color:#aaa">(${views.toLocaleString()} views)</span>`;
+
+        // Get references to the logged-in specific buttons
+        const likeBtnLoggedIn = document.getElementById("likeBtnLoggedIn");
+        const saveBtnLoggedIn = document.getElementById("saveBtnLoggedIn");
+        const commentTextArea = document.getElementById("commentTextArea");
+        const postCommentBtn = document.getElementById("postCommentBtn");
+
+        // Add event listeners for logged-in actions
+        if (likeBtnLoggedIn) {
+          likeBtnLoggedIn.addEventListener("click", () => showAlertModal("❤️ Thanks for liking!"));
+        }
+        if (saveBtnLoggedIn) {
+          saveBtnLoggedIn.addEventListener("click", () => showAlertModal("💾 Video saved to your favorites!"));
+        }
+        if (postCommentBtn) {
+          postCommentBtn.addEventListener("click", () => {
+            if (commentTextArea.value.trim() !== "") {
+              showAlertModal("💬 Comment posted! (Feature coming soon)");
+              commentTextArea.value = ""; // Clear textarea after "posting"
+            } else {
+              showAlertModal("Please write a comment before posting.");
+            }
+          });
+        }
+      }
+    });
+
+    // DOMContentLoaded for fake comments (always runs)
+    document.addEventListener("DOMContentLoaded", () => {
+      const shuffledComments = shuffle([
+        "That was hot 🔥�",
+        "She's amazing...",
+        "Loved the moves at 2:34",
+        "Can't stop watching this",
+        "More like this please!",
+        "Where can I find her?",
+        "Insanely good 😩"
+      ]);
+
+      const commentSection = document.getElementById("fakeComments");
+      shuffledComments.slice(0, 5).forEach(txt => {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.textContent = txt;
+        commentSection.appendChild(div);
+      });
+    });
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+  </script>
 </body>
 </html>
+�
