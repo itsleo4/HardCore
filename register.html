@@ -114,7 +114,6 @@
     <span class="link" id="goToLogin">Already have an account? Login</span>
   </div>
 
-  <!-- Custom Alert Modal -->
   <div id="customAlertModal" class="modal">
     <div class="modal-content">
       <p id="alertMessage"></p>
@@ -124,7 +123,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"; // Removed sendEmailVerification
 
     const firebaseConfig = {
       apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
@@ -172,18 +171,13 @@
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await sendEmailVerification(userCredential.user);
+        // The sendEmailVerification() block has been removed as requested.
 
-        // Replace the alert and redirection with the new HTML content
-        document.body.innerHTML = `
-          <div class="auth-box">
-            <h2>Verify Your Email</h2>
-            <p>We've sent a verification link to <strong>${email}</strong>. Please check your inbox.</p>
-            <p>After verifying, you can <a href="auth.html" style="color:hotpink;">Login here</a>.</p>
-          </div>
-        `;
-        // Note: After innerHTML replacement, previous event listeners on old elements are lost.
-        // For this specific case (redirecting to a new static message), it's acceptable.
+        // After successful user creation, show alert and redirect
+        showAlertModal("✅ Registration successful!", () => {
+          // Redirect to auth.html so the user can then log in
+          window.location.href = "auth.html";
+        });
 
       } catch (error) {
         showAlertModal("Registration failed: " + error.message); // Use custom modal for errors
