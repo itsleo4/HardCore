@@ -3,113 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Free Videos – LuxFlix</title>
+  <title>LuxFlix Free</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
     body {
+      background: black;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #0d0d0d;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      font-size: 1.3rem;
+      background: linear-gradient(to right, #ff0066, #ff3399);
+    }
+    .topbar a {
       color: white;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      margin: 30px 0 10px;
-    }
-
-    .teaser-gif {
-      width: 220px;
-      border-radius: 16px;
-      margin: 20px auto;
-      box-shadow: 0 0 20px hotpink;
-    }
-
-    .btn {
-      background: hotpink;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 50px;
-      font-size: 1.1rem;
+      text-decoration: none;
+      margin: 0 15px;
       font-weight: bold;
-      color: white;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: transform 0.3s;
     }
-
-    .btn:hover {
-      transform: scale(1.05);
-      background: #ff4fa2;
+    .gif-banner {
+      max-width: 100%;
+      border-radius: 10px;
+      margin: 20px 0;
     }
-
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      padding: 30px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .video-box {
-      background-color: #1a1a1a;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
-      transition: transform 0.3s;
-    }
-
-    .video-box:hover {
-      transform: scale(1.02);
-    }
-
     iframe {
-      width: 100%;
-      height: 320px;
+      width: 90%;
+      max-width: 600px;
+      height: 340px;
       border: none;
+      border-radius: 12px;
+      margin: 20px auto;
     }
-
-    @media screen and (max-width: 600px) {
-      iframe {
-        height: 200px;
-      }
-
-      .teaser-gif {
-        width: 90%;
-      }
+    footer {
+      font-size: 0.9rem;
+      color: gray;
+      padding: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h1>🔥 Unlock More Pleasure — Become a LuxFlix Pro Member 🔐</h1>
-
-  <img class="teaser-gif" src="https://itsleo4.github.io/HardCore/InShot_20250722_143037415.gif" alt="Teaser" />
-
-  <a href="membership.html"><button class="btn">Become a Member</button></a>
-
-  <div class="video-grid">
-    <div class="video-box">
-      <iframe src="https://strtape.tech/e/1pe3Yo0pMPseqWl/" allowfullscreen></iframe>
-    </div>
-    <div class="video-box">
-      <iframe src="https://strtape.tech/e/WrlAXXvapBIbDkx/" allowfullscreen></iframe>
-    </div>
-    <div class="video-box">
-      <iframe src="https://strtape.tech/e/owPJoQYvYbIJawz/" allowfullscreen></iframe>
-    </div>
-    <div class="video-box">
-      <iframe src="https://strtape.tech/e/wDJrq9bxgxSoe1/" allowfullscreen></iframe>
-    </div>
-    <div class="video-box">
-      <iframe src="https://strtape.tech/e/PqGaZ0MpkMF0qAG/" allowfullscreen></iframe>
+  <div class="topbar">
+    <div><strong>LuxFlix Pro 🔥</strong></div>
+    <div>
+      <a href="free.html">Free Videos</a>
+      <a href="logout.html">Logout</a>
     </div>
   </div>
 
-  <!-- Teaser again at bottom -->
-  <img class="teaser-gif" src="https://itsleo4.github.io/HardCore/InShot_20250722_143037415.gif" alt="Teaser Again" />
+  <img class="gif-banner" src="https://itsleo4.github.io/HardCore/InShot_20250722_143037415.gif" alt="Erotic GIF" />
+
+  <!-- Free Video Section -->
+  <iframe src="https://strtape.tech/e/1pe3Yo0pMPseqWl/" allowfullscreen></iframe>
+
+  <img class="gif-banner" src="https://itsleo4.github.io/HardCore/InShot_20250722_143037415.gif" alt="Erotic GIF Bottom" />
+
+  <footer>© 2025 LuxFlix. Enter the Premium Realm.</footer>
 
 </body>
 </html>
