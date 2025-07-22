@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LuxFlix - Watch Video</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    iframe {
+      width: 100%;
+      max-width: 800px; /* Max width for video frame */
+      aspect-ratio: 16 / 9; /* Maintain 16:9 aspect ratio */
+      border: none;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 51, 102, 0.5); /* Pink shadow */
+    }
+    h1 {
+      color: #ff3366;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      background: #ff3366;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .btn:hover {
+      background: #e6004c;
+      transform: translateY(-2px);
+    }
+    .comments {
+      margin-top: 30px;
+      width: 100%;
+      max-width: 800px;
+    }
+    .comment {
+      background: #1c1c1c;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    /* Custom Alert Modal Styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: #1a1a1a;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(255, 51, 102, 0.5);
+    }
+    .modal-content button {
+      background-color: #ff3366;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .modal-content button:hover {
+      background-color: #e6004c;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="videoTitle"></h1>
+  <iframe id="videoFrame" allowfullscreen></iframe>
+  <br>
+  <button class="btn">❤️ Like</button>
+  <button class="btn">💬 Comment (Login Required)</button>
+
+  <div class="comments" id="commentsBox"></div>
+
+  <!-- Custom Alert Modal -->
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <p id="alertMessage"></p>
+      <button id="alertCloseBtn">OK</button>
+    </div>
+  </div>
+
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyByBVXgcW2BJR9qY2bebvRUDPm2n0rZr8g",
+      authDomain: "hardcoreuser-45287.firebaseapp.com",
+      projectId: "hardcoreuser-45287",
+      storageBucket: "hardcoreuser-45287.appspot.com",
+      messagingSenderId: "1080064455870",
+      appId: "1:1080064455870:web:1c78d28a21d1c0f47f5aef",
+      measurementId: "G-KLSC9Q7KBR"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Get DOM elements for the custom alert modal
+    const customAlertModal = document.getElementById("customAlertModal");
+    const alertMessage = document.getElementById("alertMessage");
+    const alertCloseBtn = document.getElementById("alertCloseBtn");
+
+    // Function to show custom alert modal
+    function showAlertModal(message, callback = null) {
+      alertMessage.textContent = message;
+      customAlertModal.style.display = "flex"; // Use flex to center content
+      alertCloseBtn.onclick = () => {
+        customAlertModal.style.display = "none";
+        if (callback) {
+          callback();
+        }
+      };
+      // Close modal if user clicks outside of it
+      window.onclick = (event) => {
+        if (event.target == customAlertModal) {
+          customAlertModal.style.display = "none";
+          if (callback) {
+            callback();
+          }
+        }
+      };
+    }
+
+    // Firebase Auth State Listener - Checks if user is logged in
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // Not logged in, show alert and redirect
+        showAlertModal("You must be logged in to watch this video.", () => {
+          window.location.href = "login.html"; // redirect to login
+        });
+      }
+    });
+
+    // Get DOM elements for the video page
+    const params = new URLSearchParams(window.location.search);
+    const vid = parseInt(params.get("vid"));
+
+    const videos = [
+      {
+        title: "Giant dildo destroyed her pussy",
+        embed: "https://strtape.tech/e/1pe3Yo0pMPseqWl/",
+      },
+      {
+        title: "She didn't lose the chance",
+        embed: "https://strtape.tech/e/WrlAXXvapBIbDkx/",
+      },
+      {
+        title: "Shemale and two beauties",
+        embed: "https://strtape.tech/e/owPJoQYvYbIJawz/",
+      },
+      {
+        title: "Two elves and one milf",
+        embed: "https://strtape.tech/e/wDJrq9bxgxSoe1/",
+      },
+      {
+        title: "Oiling the body then riding the dick",
+        embed: "https://strtape.tech/e/PqGaZ0MpkMF0qAG/",
+      },
+    ];
+
+    const comments = [
+      "This is🔥🔥🔥!",
+      "Her moans were insane 👀",
+      "Came in seconds �",
+      "This website is better than PH fr!",
+      "I’m addicted 😭",
+      "Why is this better than Netflix?",
+      "Bro where’s part 2? 😫",
+      "I shouldn’t be watching this at work 🫣",
+    ];
+
+    const videoTitleElement = document.getElementById("videoTitle");
+    const videoFrameElement = document.getElementById("videoFrame");
+    const commentsBoxElement = document.getElementById("commentsBox");
+
+    const vidData = videos[vid - 1];
+    if (vidData) {
+      videoTitleElement.textContent = vidData.title;
+      videoFrameElement.src = vidData.embed;
+    }
+
+    const shuffled = comments.sort(() => 0.5 - Math.random()).slice(0, 5);
+    shuffled.forEach(text => {
+      commentsBoxElement.innerHTML += `<div class="comment">🧑‍💻 ${text}</div>`;
+    });
+  </script>
+</body>
+</html>
+�

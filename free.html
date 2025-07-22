@@ -1,159 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>🔥 Free Videos | LuxFlix</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LuxFlix - Free Videos</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
     body {
-      background: #0b0b0c;
-      color: #fff;
+      background-color: #0d0d0d;
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
+      color: #fff;
       padding: 20px;
     }
-
-    h1 {
-      text-align: center;
-      font-size: 2em;
-      color: #ff4a9d;
-      margin-bottom: 30px;
-    }
-
     .video-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
-
     .video-card {
-      background: #151515;
-      border-radius: 18px;
+      background: #1c1c1c;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 0 12px rgba(255, 74, 157, 0.3);
-      transition: transform 0.3s;
-    }
-
-    .video-card:hover {
-      transform: scale(1.01);
-    }
-
-    .video-wrapper {
+      transition: transform 0.3s ease;
       position: relative;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
     }
-
-    .video-wrapper iframe {
-      width: 100%;
-      height: 100%;
+    .video-card:hover {
+      transform: scale(1.02);
     }
-
+    .video-thumb {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
     .video-info {
-      padding: 14px;
+      padding: 10px 15px;
     }
-
     .video-title {
-      font-size: 1em;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #ff85c1;
+      font-size: 16px;
+      margin: 0 0 8px;
     }
-
-    .video-actions {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9em;
+    .video-meta {
+      font-size: 14px;
       color: #ccc;
     }
-
-    .like-btn,
-    .save-btn {
-      cursor: pointer;
-      color: #ff4a9d;
-      transition: 0.2s;
+    .meta-icons {
+      margin-top: 8px;
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
     }
-
-    .like-btn:hover,
-    .save-btn:hover {
-      color: #fff;
+    .meta-icons span {
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .meta-icons span:hover {
+      color: #ff3366;
     }
   </style>
 </head>
 <body>
-
-  <h1>💦 Free LuxFlix Videos 💦</h1>
-
-  <div class="video-grid">
-    <!-- Video 1 -->
-    <div class="video-card">
-      <div class="video-wrapper">
-        <iframe src="https://strtape.tech/e/1pe3Yo0pMPseqWl/" allowfullscreen></iframe>
-      </div>
-      <div class="video-info">
-        <div class="video-title">Giant dildo destroyed her pussy</div>
-        <div class="video-actions">
-          <span class="like-btn">❤️ <span class="like-count">12.1K</span></span>
-          <span class="views">👁️ <span class="view-count" data-key="v1">3.2M</span></span>
-          <span class="save-btn">💾 Save</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Video 2 -->
-    <div class="video-card">
-      <div class="video-wrapper">
-        <iframe src="https://strtape.tech/e/WrlAXXvapBIbDkx/" allowfullscreen></iframe>
-      </div>
-      <div class="video-info">
-        <div class="video-title">She didn't lose the chance</div>
-        <div class="video-actions">
-          <span class="like-btn">❤️ <span class="like-count">18.7K</span></span>
-          <span class="views">👁️ <span class="view-count" data-key="v2">2.9M</span></span>
-          <span class="save-btn">💾 Save</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <h1>🔥 Free Videos</h1>
+  <div class="video-grid" id="videoGrid"></div>
 
   <script>
-    // Function to convert raw number to M/K format
-    function formatViews(n) {
-      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-      if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
-      return n.toString();
-    }
+    const fakeViews = () => (Math.floor(Math.random() * 3_000_000) + 1_000_000).toLocaleString();
+    const fakeLikes = () => (Math.floor(Math.random() * 500_000) + 100_000).toLocaleString();
 
-    // Fake view generator (millions)
-    const views = document.querySelectorAll('.view-count');
-    views.forEach(v => {
-      const key = v.dataset.key;
-      let stored = localStorage.getItem('views_' + key);
-      let num = stored ? parseInt(stored) + Math.floor(Math.random() * 500 + 300) : Math.floor(Math.random() * 1e6 + 2e6);
-      localStorage.setItem('views_' + key, num);
-      v.textContent = formatViews(num);
-    });
+    const videos = [
+      {
+        id: 1,
+        title: "Giant dildo destroyed her pussy",
+        thumb: "https://i.imgur.com/4ZQZ4LF.jpeg",
+      },
+      {
+        id: 2,
+        title: "She didn't lose the chance",
+        thumb: "https://i.imgur.com/X9chW3N.jpeg",
+      },
+      {
+        id: 3,
+        title: "Shemale and two beauties",
+        thumb: "https://i.imgur.com/3UB1nVh.jpeg",
+      },
+      {
+        id: 4,
+        title: "Two elves and one milf",
+        thumb: "https://i.imgur.com/XDeOjHV.jpeg",
+      },
+      {
+        id: 5,
+        title: "Oiling the body then riding the dick",
+        thumb: "https://i.imgur.com/UMcl0ST.jpeg",
+      },
+    ];
 
-    // Fake like on click
-    document.querySelectorAll('.like-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const count = btn.querySelector('.like-count');
-        let val = parseFloat(count.textContent.replace(/[KM]/g, ''));
-        if (count.textContent.includes('M')) val *= 1000000;
-        else if (count.textContent.includes('K')) val *= 1000;
-        val += Math.floor(Math.random() * 10 + 1);
-        count.textContent = formatViews(val);
-      });
-    });
-
-    // Fake save button
-    document.querySelectorAll('.save-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        alert("💾 Video saved! (fake for now)");
-      });
+    const grid = document.getElementById("videoGrid");
+    videos.forEach(video => {
+      grid.innerHTML += `
+        <div class="video-card">
+          <a href="watch.html?vid=${video.id}">
+            <img src="${video.thumb}" alt="${video.title}" class="video-thumb" />
+          </a>
+          <div class="video-info">
+            <h3 class="video-title">${video.title}</h3>
+            <div class="video-meta">${fakeViews()} views</div>
+            <div class="meta-icons">
+              <span>❤️ ${fakeLikes()}</span>
+              <span>💾 Save</span>
+            </div>
+          </div>
+        </div>
+      `;
     });
   </script>
-
 </body>
 </html>
