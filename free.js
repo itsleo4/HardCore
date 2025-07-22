@@ -28,21 +28,24 @@ onAuthStateChanged(auth, (user) => {
     userStatus.innerText = `Welcome, ${user.email}`;
     logoutBtn.style.display = 'inline-block';
     loginBtn.style.display = 'none';
-    banner.style.display = 'none'; // hide guest banner
+    banner.style.display = 'none';
   } else {
     userStatus.innerText = `Guest`;
     logoutBtn.style.display = 'none';
     loginBtn.style.display = 'inline-block';
-    banner.style.display = 'block'; // show guest banner
+    banner.style.display = 'block';
   }
 });
 
-// Logout
+// Buttons
 logoutBtn.addEventListener('click', () => {
   signOut(auth).then(() => {
     alert('Logged out');
     location.reload();
   });
+});
+loginBtn.addEventListener('click', () => {
+  window.location.href = "/login.html";
 });
 
 // Sample videos
@@ -64,8 +67,8 @@ const videos = [
   },
 ];
 
-// Render videos
-videos.forEach((vid, i) => {
+// Render video cards
+videos.forEach((vid) => {
   const card = document.createElement('div');
   card.className = 'video-card';
   card.innerHTML = `

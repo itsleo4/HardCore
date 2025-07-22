@@ -67,20 +67,19 @@ header {
   object-fit: cover;
 }
 
-.video-info {
-  padding: 10px;
+.video-card h3 {
   text-align: center;
-}
-
-.video-info h3 {
-  margin: 10px 0 5px;
+  padding: 10px;
   font-size: 1rem;
   color: #ffccff;
 }
 
-.fake-metrics {
-  font-size: 0.9rem;
-  color: #bbbbbb;
+.meta {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 10px 15px;
+  font-size: 0.95rem;
+  color: #f2a3f0;
 }
 
 footer {
@@ -89,6 +88,7 @@ footer {
   color: #aaa;
   font-size: 0.9rem;
 }
+
 /* Make all links bright and visible */
 a {
   color: #ff4b8b;
